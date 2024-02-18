@@ -9,58 +9,122 @@ import Box from '@mui/material/Box';
 import Image from 'next/image';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
+import BannerItem from '@/components/banner-item/banner-item';
 
 export default function Home() {
     return (
-        <Container maxWidth="lg" className="px-24 py-10">
-            <PageHeader title="Start working." classNames="uppercase" />
-            <main className="flex justify-between items-center h-50vh">
-                <Box
-                    sx={{
-                        flexGrow: { xs: 1, md: 0 },
-                        width: { xs: '50vw' },
-                    }}
-                >
-                    <Card className="h-96 flex flex-col justify-between p-6">
-                        <CardHeader title="Perfect plans for everybody" />
-                        <CardContent className="h-full">
-                            <Typography
-                                variant="body1"
-                                color="text.secondary"
-                                component="p"
-                                className="text-justify"
-                            >
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Reiciendis, sequi, recusandae
-                                ab minima, molestiae unde labore corporis et
-                                tempora alias officia perspiciatis reprehenderit
-                                qui sapiente tempore veritatis. Rerum, aliquam
-                                consequatur.
-                            </Typography>
-                        </CardContent>
-                        <CardActions className="flex justify-end">
-                            <Link href="/plans">Browse plans</Link>
-                        </CardActions>
-                    </Card>
-                </Box>
-                <Box
-                    sx={{
-                        mr: 2,
-                        display: { xs: 'none', md: 'flex' },
-                        fontWeight: 700,
-                        letterSpacing: '.3rem',
-                        color: 'inherit',
-                        textDecoration: 'none',
-                    }}
-                >
-                    <Image
-                        src="/man-lifting.svg"
-                        alt="Man lifting"
-                        width={420}
-                        height={320}
-                        priority
+        <Container maxWidth="lg" className="p-24">
+            <main>
+                <section>
+                    <PageHeader title="Start working." classNames="uppercase" />
+                    <Box
+                        sx={{
+                            gap: '6rem',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            minHeight: '70vh',
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                                width: '100%',
+                            }}
+                        >
+                            <Card className="h-96 flex flex-col justify-between p-6">
+                                <CardHeader title="Perfect plans for everybody" />
+                                <CardContent className="h-full">
+                                    <Typography
+                                        variant="body1"
+                                        color="text.secondary"
+                                        component="p"
+                                        className="text-justify"
+                                    >
+                                        Lorem ipsum dolor sit amet consectetur
+                                        adipisicing elit. Reiciendis, sequi,
+                                        recusandae ab minima, molestiae unde
+                                        labore corporis et tempora alias officia
+                                        perspiciatis reprehenderit qui sapiente
+                                        tempore veritatis. Rerum, aliquam
+                                        consequatur.
+                                    </Typography>
+                                </CardContent>
+                                <CardActions className="flex justify-end">
+                                    <Link href="/plans">Browse plans</Link>
+                                </CardActions>
+                            </Card>
+                        </Box>
+                        <Box
+                            sx={{
+                                display: { xs: 'none', md: 'flex' },
+                                justifyContent: 'center',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                                width: '100%',
+                            }}
+                        >
+                            <Image
+                                src="/man-lifting.svg"
+                                alt="Man lifting"
+                                width={420}
+                                height={320}
+                                priority
+                            />
+                        </Box>
+                    </Box>
+                </section>
+                <section>
+                    <PageHeader title="Simple steps" classNames="uppercase" />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            minHeight: '70vh',
+                            flexDirection: { xs: 'column', md: 'row' },
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '2.5rem',
+                            flexGrow: { xs: 1, md: 0 },
+                        }}
+                    >
+                        <BannerItem
+                            title="Create plan"
+                            subtitle="Be fertile"
+                            image="/create.svg"
+                            imageAlt="Create"
+                        />
+                        <BannerItem
+                            title="Share it!"
+                            subtitle="Link it to your friends"
+                            image="/share.svg"
+                            imageAlt="Share"
+                        />
+                        <BannerItem
+                            title="Rate"
+                            subtitle="Leave feedback"
+                            image="/feedback.svg"
+                            imageAlt="feedback"
+                        />
+                    </Box>
+                </section>
+                <section>
+                    <PageHeader
+                        title="Let's get started"
+                        classNames="uppercase justify-center"
                     />
-                </Box>
+                    <Box
+                        sx={{
+                            gap: '6rem',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            minHeight: '50vh',
+                        }}
+                    ></Box>
+                </section>
             </main>
         </Container>
     );

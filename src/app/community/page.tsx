@@ -1,3 +1,10 @@
+import Container from '@mui/material/Container';
+import PageHeader from '@/components/page-header/page-header';
+
 export default function ComunityPage() {
-    return <h1>Community</h1>;
+    return (
+        <Container maxWidth="lg" className="p-24">
+            <PageHeader title="Community" classNames="uppercase" />
+        </Container>
+    );
 }

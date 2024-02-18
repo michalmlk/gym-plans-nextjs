@@ -11,6 +11,9 @@ import { Menu as MenuIcon } from '@mui/icons-material';
 import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import classNames from 'classnames';
+import styles from './top-bar.module.css';
 
 const pages = [
     {
@@ -36,8 +39,10 @@ export default function TopBar() {
         setAnchorElNav(null);
     };
 
+    const path = usePathname();
+
     return (
-        <AppBar position="static">
+        <AppBar position="fixed">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Typography
@@ -122,7 +127,15 @@ export default function TopBar() {
                         }}
                     >
                         {pages.map((page, idx) => (
-                            <Link key={idx} href={page.href}>
+                            <Link
+                                key={idx}
+                                href={page.href}
+                                className={
+                                    path.startsWith(page.href)
+                                        ? styles.isActive
+                                        : ''
+                                }
+                            >
                                 {page.label}
                             </Link>
                         ))}

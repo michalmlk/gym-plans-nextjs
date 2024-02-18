@@ -10,8 +10,10 @@ export default function PageHeader({
     classNames,
 }: PageHeaderProps): React.ReactElement {
     return (
-        <header className={`flex justify-between w-full my-10 ${classNames}`}>
-            <h1 className="font-bold">{title}</h1>
+        <header
+            className={`header flex justify-between w-full my-10 ${classNames}`}
+        >
+            <h1 className="font-bold align-center">{title}</h1>
         </header>
     );
 }
