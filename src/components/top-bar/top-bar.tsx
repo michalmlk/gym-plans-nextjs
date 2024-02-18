@@ -23,7 +23,7 @@ const pages = [
     },
 ];
 
-function MainHeader() {
+export default function TopBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
         null
     );
@@ -44,7 +44,6 @@ function MainHeader() {
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
                             color: 'inherit',
@@ -105,7 +104,6 @@ function MainHeader() {
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
-                            fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
                             color: 'inherit',
@@ -134,4 +132,3 @@ function MainHeader() {
         </AppBar>
     );
 }
-export default MainHeader;
