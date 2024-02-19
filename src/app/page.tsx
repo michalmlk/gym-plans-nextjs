@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import BannerItem from '@/components/banner-item/banner-item';
+import Button from '@mui/material/Button';
 
 export default function Home() {
     return (
@@ -54,7 +55,14 @@ export default function Home() {
                                     </Typography>
                                 </CardContent>
                                 <CardActions className="flex justify-end">
-                                    <Link href="/plans">Browse plans</Link>
+                                    <Link href="/plans" passHref>
+                                        <Button
+                                            variant="outlined"
+                                            color="primary"
+                                        >
+                                            Browse plans
+                                        </Button>
+                                    </Link>
                                 </CardActions>
                             </Card>
                         </Box>
