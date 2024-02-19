@@ -12,7 +12,7 @@ import Link from 'next/link';
 import BannerItem from '@/components/banner-item/banner-item';
 import Button from '@mui/material/Button';
 
-export default function Home() {
+export default async function Home() {
     return (
         <Container maxWidth="lg" className="p-24">
             <main>
