@@ -1,4 +1,10 @@
+import Container from '@mui/material/Container';
+
 export default function PlanPage({ params }) {
     const { id } = params;
-    return <main>This is plan with id: {id}</main>;
+    return (
+        <Container className="p-24">
+            <main>This is plan with id: {id}</main>
+        </Container>
+    );
 }
