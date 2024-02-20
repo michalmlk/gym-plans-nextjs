@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import classNames from 'classnames';
 import styles from './top-bar.module.css';
+import { UserButton } from '@clerk/nextjs';
 
 const pages = [
     {
@@ -139,6 +140,9 @@ export default function TopBar() {
                                 {page.label}
                             </Link>
                         ))}
+                    </Box>
+                    <Box>
+                        <UserButton />
                     </Box>
                 </Toolbar>
             </Container>

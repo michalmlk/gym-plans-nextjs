@@ -1,19 +1,23 @@
+import { PropsWithChildren, ReactNode } from 'react';
 import './page-header.css';
 
 type PageHeaderProps = {
     title: string;
     classNames?: string;
 };
-
-export default function PageHeader({
+const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = ({
     title,
     classNames,
-}: PageHeaderProps): React.ReactElement {
+    children,
+}): ReactNode => {
     return (
         <header
-            className={`header flex justify-between w-full my-10 ${classNames}`}
+            className={`header flex justify-between items-center w-full my-10 ${classNames}`}
         >
             <h1 className="font-bold align-center">{title}</h1>
+
+            {children}
         </header>
     );
-}
+};
+export default PageHeader;

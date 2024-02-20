@@ -2,7 +2,9 @@ export const plans = [
     {
         id: 1,
         title: 'Awesome plan 1',
+        author: 'superpowerlifter123',
         description: 'Wonderful plan for begginers 1',
+        tags: ['strength', 'intermediate'],
         excercises: {
             0: [
                 {
@@ -25,8 +27,10 @@ export const plans = [
     },
     {
         id: 2,
+        author: 'freakyCrossfitGuy2',
         title: 'Awesome plan 2',
         description: 'Wonderful plan for begginers 2',
+        tags: ['mobility', 'crossfit'],
         excercises: {
             0: [
                 {
