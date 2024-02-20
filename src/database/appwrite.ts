@@ -18,6 +18,7 @@ const isCollectionsInitialized = async (
     try {
         await databases.getCollection(databaseId, 'excercise');
         await databases.getCollection(databaseId, 'plans');
+        await databases.getCollection(databaseId, 'users');
         return true;
     } catch (e) {
         console.error(e);

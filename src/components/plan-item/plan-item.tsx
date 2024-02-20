@@ -7,6 +7,8 @@ import Link from 'next/link';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
+import { clerkClient } from '@clerk/nextjs';
+import Image from 'next/image';
 
 export type PlanItemProps = {
     title: string;
@@ -14,15 +16,19 @@ export type PlanItemProps = {
     description: string;
     id: number;
     author: string;
+    userId: string;
 };
 
-export default function PlanItem({
+export default async function PlanItem({
     title,
     description,
     id,
     tags,
     author,
+    userId,
 }: PlanItemProps) {
+    const user = await clerkClient.users.getUser(userId);
+    console.log(user);
     return (
         <Box
             sx={{
@@ -33,9 +39,27 @@ export default function PlanItem({
             <Card className="p-4 h-full flex flex-col justify-between">
                 <CardHeader title={title} style={{ paddingBottom: 0 }} />
                 <CardContent className="grow">
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        {author}
-                    </Typography>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '1rem',
+                        }}
+                    >
+                        <Image
+                            src={user.imageUrl}
+                            alt="user avatar"
+                            width={50}
+                            height={50}
+                        />
+                        <Typography
+                            variant="body1"
+                            component="p"
+                            className="text-m text-black"
+                        >
+                            {user.firstName} {user.lastName}
+                        </Typography>
+                    </Box>
                     <Typography
                         variant="body1"
                         component="p"

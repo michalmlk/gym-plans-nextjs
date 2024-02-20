@@ -11,21 +11,8 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import BannerItem from '@/components/banner-item/banner-item';
 import Button from '@mui/material/Button';
-import container from '@/context';
-import sdk, { Query } from 'node-appwrite';
-import { AbstractDatabaseClient } from '@/database';
 
 export default async function Home() {
-    const databases = container.get(AbstractDatabaseClient).getClient();
-    const excercises = (
-        await databases.listDocuments<sdk.Models.Document>(
-            process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
-            'excercise'
-        )
-    ).documents;
-
-    console.log(excercises);
-
     return (
         <Container maxWidth="lg" className="p-24">
             <main>

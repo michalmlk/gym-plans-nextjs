@@ -1,6 +1,7 @@
 import { injectable } from 'inversify';
-import sdk from 'node-appwrite';
+import sdk, { Query } from 'node-appwrite';
 import { client } from '@/database/appwrite';
+import { PlanDTO } from '@/app/plans/page';
 
 export abstract class AbstractDatabaseClient {
     abstract getClient(): sdk.Databases;
@@ -32,6 +33,54 @@ export class DatabaseClient implements AbstractDatabaseClient {
 
     getClient(): sdk.Databases {
         return this.databases;
+    }
+
+    async getPlan(planId: number): Promise<sdk.Models.Document & PlanDTO> {
+        const currentPlan = await this.databases.getDocument(
+            process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
+            'plans',
+            planId.toString()
+        );
+        return currentPlan as unknown as sdk.Models.Document & PlanDTO;
+    }
+
+    async getPlans(): Promise<
+        sdk.Models.DocumentList<sdk.Models.Document & PlanDTO>
+    > {
+        return (
+            await this.databases.listDocuments(
+                process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
+                'plans'
+            )
+        ).documents;
+    }
+
+    async getExcercises() {
+        const excercises = (
+            await this.databases.listDocuments<sdk.Models.Document>(
+                process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
+                'excercise'
+            )
+        ).documents;
+        return excercises;
+    }
+
+    async getExcercisesFromPlan(
+        planId: number
+    ): Promise<sdk.Models.Document[]> {
+        try {
+            const currentPlan = await this.getPlan(planId);
+            const excercises = (
+                await this.databases.listDocuments<
+                    sdk.Models.Document & { excercisesIds: number[] }
+                >(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!, 'excercise', [
+                    Query.equal('id', [currentPlan.excercisesIds]),
+                ])
+            ).documents;
+            return excercises;
+        } catch (e: any) {
+            throw new Error(e.message);
+        }
     }
 }
 
