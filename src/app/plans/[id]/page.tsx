@@ -1,24 +1,22 @@
 import Container from '@mui/material/Container';
 import DatabaseClient from '@/database';
-import { ParamsProps } from '@/app/common/model';
 import { Suspense } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
+import { PageParams } from '@/app/common/model';
+
 async function Exercises({ id }: { id: string }) {
     const databaseService = new DatabaseClient();
-    const excercises = await databaseService.getExcercisesFromPlan(
-        parseInt(id)
-    );
+    const exercises = await databaseService.getExercisesFromPlan(parseInt(id));
     return (
         <main>
-            {excercises.length
-                ? excercises.map((e) => <p key={e.id}>{e.name}</p>)
+            {exercises && exercises.length
+                ? exercises.map((e) => <p key={e.id}>{e.name}</p>)
                 : 'No excercises'}
         </main>
     );
 }
 
-export default function PlanPage({ params }: { params: ParamsProps }) {
-    console.log(params);
+export default function PlanPage({ params }: PageParams) {
     const { id } = params;
 
     return (

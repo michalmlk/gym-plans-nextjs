@@ -7,30 +7,57 @@ import {
     Controller,
 } from 'react-hook-form';
 import Input from '@mui/material/Input';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import { ExerciseDTO } from '@/app/common/model';
+import { useUser } from '@clerk/nextjs';
+import { Add, NoteAdd, Remove } from '@mui/icons-material';
 
-type Inputs = {
-    example: string;
-    exampleRequired: string;
+type FormValues = {
+    title: string;
+    description?: string;
+    tags: string[];
+    userId: string;
+    exercises: Omit<ExerciseDTO, 'id'>[];
 };
 
 export default function CreatePlanForm() {
+    const { user } = useUser();
+
+    console.log('data:', user?.id);
     const {
         control,
         register,
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm<Inputs>({
-        defaultValues: {},
+    } = useForm<FormValues>({
+        defaultValues: {
+            title: 'Examplary plan',
+            description: '',
+            tags: [],
+            userId: user?.id,
+            exercises: [
+                {
+                    name: '',
+                    description: '',
+                    isOwnBodyWeight: false,
+                    reps: 0,
+                    series: 1,
+                    weight: 0,
+                },
+            ],
+        },
     });
-    const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+    const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
 
     const { fields, append, remove } = useFieldArray({
+        name: 'exercises',
         control,
-        name: 'test',
     });
-
-    console.log(watch('example')); // watch input value by passing the name of it
 
     return (
         /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
@@ -39,33 +66,71 @@ export default function CreatePlanForm() {
             className="flex flex-col gap-6 items-center"
         >
             {/* register your input into the hook by invoking the "register" function */}
-            <Input type="text" placeholder="Title" {...register('example')} />
+            <Input type="text" placeholder="Title" {...register('title')} />
             <Input
                 type="text"
                 placeholder="Description"
-                {...register('example')}
+                {...register('description')}
             />
-            <ul>
+            <ul className="flex flex-col gap-6">
                 {fields.map((item, index) => (
                     <li key={item.id}>
-                        <Input {...register(`test.${index}.firstName`)} />
-                        <Controller
-                            render={({ field }) => <input {...field} />}
-                            name={`test.${index}.lastName`}
-                            control={control}
-                        />
-                        <button type="button" onClick={() => remove(index)}>
-                            Delete
-                        </button>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                            }}
+                        >
+                            <div>
+                                <Input
+                                    placeholder="Title"
+                                    {...register(`exercises[${index}].title`)}
+                                />
+                                <Input
+                                    placeholder="Description"
+                                    {...register(
+                                        `exercises[${index}].description`
+                                    )}
+                                />
+                                <Input
+                                    type="number"
+                                    {...register(`exercises[${index}].reps`)}
+                                />
+                                <Input
+                                    type="number"
+                                    {...register(`exercises[${index}].series`)}
+                                />
+                                <FormControlLabel
+                                    control={<Switch defaultChecked />}
+                                    label="Own body weight"
+                                />
+                                <Input
+                                    type="number"
+                                    {...register(`exercises${[index]}.weight`)}
+                                />
+                            </div>
+                            <div>
+                                <IconButton aria-label="Add exercise">
+                                    <Add
+                                        onClick={() => {
+                                            console.log(item);
+                                            append({ ...item });
+                                        }}
+                                    />
+                                </IconButton>
+                                <IconButton
+                                    aria-label="Add exercise"
+                                    onClick={() => remove(index)}
+                                >
+                                    <Remove />
+                                </IconButton>
+                            </div>
+                        </Box>
                     </li>
                 ))}
             </ul>
-            {/* include validation with required or other standard HTML validation rules */}
-            <Input {...register('exampleRequired', { required: true })} />
-            {/* errors will return when field validation fails  */}
-            {errors.exampleRequired && <span>This field is required</span>}
-
-            <Input type="submit" />
+            <Button variant="contained" type="submit" startIcon={<NoteAdd />}>
+                Create
+            </Button>
         </form>
     );
 }

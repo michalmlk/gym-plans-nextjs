@@ -1,7 +1,9 @@
+import React from 'react';
 import PlanItem from '../plan-item/plan-item';
 import Box from '@mui/material/Box';
+import { PlanDTO } from '@/app/common/model';
 
-function PlansGrid(plans: any) {
+export default function PlansGrid(plans: PlanDTO[]): React.ReactElement {
     return (
         <Box
             sx={{
@@ -32,5 +34,3 @@ function PlansGrid(plans: any) {
         </Box>
     );
 }
-
-export default PlansGrid;

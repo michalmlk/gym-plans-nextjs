@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import sdk, { Query } from 'node-appwrite';
 import { client } from '@/database/appwrite';
-import { PlanDTO } from '@/app/plans/page';
+import { PlanDTO, ExerciseDTO } from '@/app/common/model';
 
 export abstract class AbstractDatabaseClient {
     abstract getClient(): sdk.Databases;
@@ -35,49 +35,47 @@ export class DatabaseClient implements AbstractDatabaseClient {
         return this.databases;
     }
 
-    async getPlan(planId: number): Promise<sdk.Models.Document & PlanDTO> {
+    async getPlan(planId: number): Promise<PlanDTO> {
         const currentPlan = await this.databases.getDocument(
             process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
             'plans',
             planId.toString()
         );
-        return currentPlan as unknown as sdk.Models.Document & PlanDTO;
+        return currentPlan as unknown as PlanDTO;
     }
 
-    async getPlans(): Promise<
-        sdk.Models.DocumentList<sdk.Models.Document & PlanDTO>
-    > {
+    async getPlans(): Promise<PlanDTO[]> {
         return (
-            await this.databases.listDocuments(
+            await this.databases.listDocuments<sdk.Models.Document & PlanDTO>(
                 process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
                 'plans'
             )
-        ).documents;
+        ).documents as unknown as PlanDTO[];
     }
 
-    async getExcercises() {
-        const excercises = (
-            await this.databases.listDocuments<sdk.Models.Document>(
-                process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
-                'excercise'
-            )
-        ).documents;
-        return excercises;
+    async getExercises(): Promise<ExerciseDTO[]> {
+        return (
+            await this.databases.listDocuments<
+                sdk.Models.Document & ExerciseDTO
+            >(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!, 'excercise')
+        ).documents as unknown as ExerciseDTO[];
     }
 
-    async getExcercisesFromPlan(
+    async getExercisesFromPlan(
         planId: number
-    ): Promise<sdk.Models.Document[]> {
+    ): Promise<ExerciseDTO[] | undefined> {
         try {
             const currentPlan = await this.getPlan(planId);
-            const excercises = (
-                await this.databases.listDocuments<
-                    sdk.Models.Document & { excercisesIds: number[] }
-                >(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!, 'excercise', [
-                    Query.equal('id', [currentPlan.excercisesIds]),
-                ])
-            ).documents;
-            return excercises;
+            if (currentPlan.exerciseIds.length) {
+                const exercises = (
+                    await this.databases.listDocuments<
+                        sdk.Models.Document & ExerciseDTO
+                    >(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!, 'excercise', [
+                        Query.equal('id', currentPlan.exerciseIds),
+                    ])
+                ).documents;
+                return exercises;
+            }
         } catch (e: any) {
             throw new Error(e.message);
         }
