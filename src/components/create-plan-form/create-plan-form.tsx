@@ -10,11 +10,13 @@ import Input from '@mui/material/Input';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { ExerciseDTO } from '@/app/common/model';
 import { useUser } from '@clerk/nextjs';
 import { Add, NoteAdd, Remove } from '@mui/icons-material';
+import Card from '@mui/material/Card';
 
 type FormValues = {
     title: string;
@@ -52,7 +54,9 @@ export default function CreatePlanForm() {
             ],
         },
     });
-    const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
+
+    const onSubmit: SubmitHandler<FormValues> = (data) =>
+        console.log('abc', data, errors);
 
     const { fields, append, remove } = useFieldArray({
         name: 'exercises',
@@ -60,73 +64,235 @@ export default function CreatePlanForm() {
     });
 
     return (
-        /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
         <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-6 items-center"
         >
-            {/* register your input into the hook by invoking the "register" function */}
-            <Input type="text" placeholder="Title" {...register('title')} />
-            <Input
-                type="text"
-                placeholder="Description"
-                {...register('description')}
+            <Controller
+                control={control}
+                name="title"
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                        type="text"
+                        placeholder="Title"
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                    />
+                )}
             />
-            <ul className="flex flex-col gap-6">
-                {fields.map((item, index) => (
-                    <li key={item.id}>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                            }}
-                        >
-                            <div>
-                                <Input
-                                    placeholder="Title"
-                                    {...register(`exercises[${index}].title`)}
-                                />
-                                <Input
-                                    placeholder="Description"
-                                    {...register(
-                                        `exercises[${index}].description`
-                                    )}
-                                />
-                                <Input
-                                    type="number"
-                                    {...register(`exercises[${index}].reps`)}
-                                />
-                                <Input
-                                    type="number"
-                                    {...register(`exercises[${index}].series`)}
-                                />
-                                <FormControlLabel
-                                    control={<Switch defaultChecked />}
-                                    label="Own body weight"
-                                />
-                                <Input
-                                    type="number"
-                                    {...register(`exercises${[index]}.weight`)}
-                                />
-                            </div>
-                            <div>
-                                <IconButton aria-label="Add exercise">
-                                    <Add
-                                        onClick={() => {
-                                            console.log(item);
-                                            append({ ...item });
-                                        }}
-                                    />
-                                </IconButton>
-                                <IconButton
-                                    aria-label="Add exercise"
-                                    onClick={() => remove(index)}
+            <Controller
+                control={control}
+                name="description"
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                        type="text"
+                        placeholder="Description"
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                    />
+                )}
+            />
+            <ul className="flex gap-6 w-full flex-wrap justify-center">
+                {fields.map((item, index) => {
+                    const isExerciseOnOwnBodyWeight = watch(
+                        `exercises[${index}].isOwnBodyweight`
+                    )!;
+                    return (
+                        <li key={item.id}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <Card
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '1rem',
+                                        width: '100%',
+                                        minWidth: '540px',
+                                        flexGrow: '1',
+                                        padding: '2rem',
+                                    }}
                                 >
-                                    <Remove />
-                                </IconButton>
-                            </div>
-                        </Box>
-                    </li>
-                ))}
+                                    <Controller
+                                        control={control}
+                                        name={`exercises[${index}].title`}
+                                        rules={{
+                                            required: true,
+                                        }}
+                                        render={({
+                                            field: {
+                                                onChange,
+                                                onBlur,
+                                                value,
+                                                ref,
+                                            },
+                                        }) => (
+                                            <>
+                                                <InputLabel>Title</InputLabel>
+                                                <Input
+                                                    placeholder="Title"
+                                                    onBlur={onBlur}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                />
+                                            </>
+                                        )}
+                                    />
+                                    <Controller
+                                        control={control}
+                                        name={`exercises[${index}].description`}
+                                        rules={{
+                                            required: true,
+                                        }}
+                                        render={({
+                                            field: {
+                                                onChange,
+                                                onBlur,
+                                                value,
+                                                ref,
+                                            },
+                                        }) => (
+                                            <>
+                                                <InputLabel>
+                                                    Description
+                                                </InputLabel>
+                                                <Input
+                                                    placeholder="Description"
+                                                    onBlur={onBlur}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                />
+                                            </>
+                                        )}
+                                    />
+                                    <Controller
+                                        control={control}
+                                        name={`exercises[${index}].reps`}
+                                        rules={{
+                                            required: true,
+                                        }}
+                                        render={({
+                                            field: {
+                                                onChange,
+                                                onBlur,
+                                                value,
+                                                ref,
+                                            },
+                                        }) => (
+                                            <>
+                                                <InputLabel>Reps</InputLabel>
+                                                <Input
+                                                    placeholder="Reps"
+                                                    onBlur={onBlur}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    type="number"
+                                                />
+                                            </>
+                                        )}
+                                    />
+                                    <Controller
+                                        control={control}
+                                        name={`exercises[${index}].series`}
+                                        rules={{
+                                            required: true,
+                                        }}
+                                        render={({
+                                            field: {
+                                                onChange,
+                                                onBlur,
+                                                value,
+                                                ref,
+                                            },
+                                        }) => (
+                                            <>
+                                                <InputLabel>Series</InputLabel>
+                                                <Input
+                                                    placeholder="Title"
+                                                    onBlur={onBlur}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                />
+                                            </>
+                                        )}
+                                    />
+                                    <Controller
+                                        control={control}
+                                        name={`exercises[${index}].isOwnBodyweight`}
+                                        render={({
+                                            field: { onChange, onBlur, value },
+                                        }) => (
+                                            <FormControlLabel
+                                                control={
+                                                    <Switch
+                                                        defaultChecked
+                                                        onChange={onChange}
+                                                        value={value}
+                                                    />
+                                                }
+                                                label="Own body weight"
+                                            />
+                                        )}
+                                    />
+                                    <Controller
+                                        control={control}
+                                        name={`exercises[${index}].weight`}
+                                        rules={{
+                                            required:
+                                                !isExerciseOnOwnBodyWeight,
+                                        }}
+                                        render={({
+                                            field: {
+                                                onChange,
+                                                onBlur,
+                                                value,
+                                                ref,
+                                            },
+                                        }) => (
+                                            <>
+                                                <InputLabel>Weight</InputLabel>
+                                                <Input
+                                                    placeholder="Weight"
+                                                    onBlur={onBlur}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    type="number"
+                                                    disabled={
+                                                        isExerciseOnOwnBodyWeight!
+                                                    }
+                                                />
+                                            </>
+                                        )}
+                                    />
+                                    <div>
+                                        <IconButton
+                                            aria-label="Add exercise"
+                                            onClick={() => {
+                                                console.log(item);
+                                                append({ ...item });
+                                            }}
+                                        >
+                                            <Add />
+                                        </IconButton>
+                                        {index !== 0 && (
+                                            <IconButton
+                                                aria-label="Add exercise"
+                                                onClick={() => remove(index)}
+                                            >
+                                                <Remove />
+                                            </IconButton>
+                                        )}
+                                    </div>
+                                </Card>
+                            </Box>
+                        </li>
+                    );
+                })}
             </ul>
             <Button variant="contained" type="submit" startIcon={<NoteAdd />}>
                 Create
