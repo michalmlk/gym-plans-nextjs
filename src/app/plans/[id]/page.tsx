@@ -1,12 +1,11 @@
 import Container from '@mui/material/Container';
-import DatabaseClient from '@/database';
 import { Suspense } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 import { PageParams } from '@/app/common/model';
+import { getExercisesFromPlan } from '@/utils/exercises';
 
 async function Exercises({ id }: { id: string }) {
-    const databaseService = new DatabaseClient();
-    const exercises = await databaseService.getExercisesFromPlan(parseInt(id));
+    const exercises = await getExercisesFromPlan(parseInt(id));
     return (
         <main>
             {exercises && exercises.length

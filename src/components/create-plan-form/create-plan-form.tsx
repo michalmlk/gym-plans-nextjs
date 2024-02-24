@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import {
     useForm,
     SubmitHandler,
@@ -21,6 +21,9 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import PageHeader from '../page-header/page-header';
+import { createPlan } from '@/utils/plans';
+import CircularProgress from '@mui/material/CircularProgress';
+import Snackbar from '@mui/material/Snackbar';
 
 type FormValues = {
     title: string;
@@ -40,6 +43,11 @@ export const defaultExerciseValues = {
 };
 
 export default function CreatePlanForm() {
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+
+    const handleSnackbarOpen = () => setIsSnackbarOpen((prev) => !prev);
+
     const { user } = useUser();
     const {
         control,
@@ -67,8 +75,23 @@ export default function CreatePlanForm() {
         },
     });
 
-    const onSubmit: SubmitHandler<FormValues> = (data) =>
-        console.log('abc', data, errors);
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
+        setIsLoading(true);
+        try {
+            await createPlan({
+                ...data,
+                id: Math.random() * 1000,
+                userId: user?.id!,
+                exerciseIds: data.exercises.map((d) => d.name),
+            });
+            alert('plan successfully created');
+        } catch (e) {
+            console.log('Error occurred.');
+        } finally {
+            setIsLoading(false);
+            handleSnackbarOpen();
+        }
+    };
 
     const { fields, append, remove } = useFieldArray({
         name: 'exercises',
@@ -77,6 +100,12 @@ export default function CreatePlanForm() {
 
     return (
         <>
+            <Snackbar
+                open={isSnackbarOpen}
+                autoHideDuration={3000}
+                onClose={() => setIsSnackbarOpen(false)}
+                message="Plan successfully created"
+            />
             <PageHeader title="Create plan" />
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -424,6 +453,13 @@ export default function CreatePlanForm() {
                     variant="contained"
                     type="submit"
                     disabled={!isValid}
+                    startIcon={
+                        isLoading ? (
+                            <CircularProgress size={20} color="info" />
+                        ) : (
+                            <Add />
+                        )
+                    }
                 >
                     Create
                 </Button>

@@ -7,7 +7,6 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../theme';
 const outfit = Outfit({ subsets: ['latin'] });
 import { ClerkProvider } from '@clerk/nextjs';
-import { initDatabase } from '@/database/appwrite';
 
 export const metadata: Metadata = {
     title: 'Gym plans',
@@ -19,12 +18,6 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    if (!process.env.NEXT_PUBLIC_APPWRITE_DB_ID) {
-        throw new Error('Cannot find process.env.NEXT_PUBLIC_APPWRITE_DB_ID');
-    }
-
-    await initDatabase(process.env.NEXT_PUBLIC_APPWRITE_DB_ID);
-
     return (
         <ClerkProvider>
             <html lang="en">

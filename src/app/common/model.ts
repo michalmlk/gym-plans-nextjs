@@ -1,11 +1,10 @@
 export type PlanDTO = {
     id: number;
     title: string;
-    description: string;
-    author: string;
+    description?: string;
     tags: string[];
     userId: string;
-    exerciseIds: number[];
+    exerciseIds: string[];
 };
 
 export type ExerciseDTO = {

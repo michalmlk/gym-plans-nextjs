@@ -4,9 +4,9 @@ import Box from '@mui/material/Box';
 import PlanItem from '@/components/plan-item/plan-item';
 import PageHeader from '@/components/page-header/page-header';
 import Button from '@mui/material/Button';
-import DatabaseClient from '@/database';
 import Link from 'next/link';
 import LinearProgress from '@mui/material/LinearProgress';
+import { getPlans } from '@/utils/plans';
 
 export type PlanDTO = {
     id: number;
@@ -19,8 +19,7 @@ export type PlanDTO = {
 };
 
 async function Plans() {
-    const databaseClient = new DatabaseClient();
-    const plans = await databaseClient.getPlans();
+    const plans = await getPlans();
 
     return (
         <Box
@@ -36,19 +35,17 @@ async function Plans() {
             }}
         >
             {plans.length &&
-                plans.map(
-                    ({ title, description, author, id, tags, userId }) => (
-                        <PlanItem
-                            key={id}
-                            title={title}
-                            description={description}
-                            author={author}
-                            id={id}
-                            tags={tags}
-                            userId={userId}
-                        />
-                    )
-                )}
+                plans.map(({ title, description, userId, id, tags }) => (
+                    <PlanItem
+                        key={id}
+                        title={title}
+                        description={description || ''}
+                        author={userId}
+                        id={id}
+                        tags={tags}
+                        userId={userId}
+                    />
+                ))}
         </Box>
     );
 }
