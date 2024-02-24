@@ -1,11 +1,12 @@
 'use client';
-
+import { useEffect } from 'react';
 import {
     useForm,
     SubmitHandler,
     useFieldArray,
     Controller,
 } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -44,8 +45,10 @@ export default function CreatePlanForm() {
         control,
         handleSubmit,
         watch,
-        formState: { errors },
+        formState: { errors, isValid },
     } = useForm<FormValues>({
+        reValidateMode: 'onChange',
+        mode: 'onChange',
         defaultValues: {
             title: 'Examplary plan',
             description: '',
@@ -90,6 +93,9 @@ export default function CreatePlanForm() {
                     <Controller
                         control={control}
                         name="title"
+                        rules={{
+                            required: 'Plan title is required',
+                        }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <Box sx={{ width: '50%' }}>
                                 <InputLabel>Plan title</InputLabel>
@@ -100,6 +106,16 @@ export default function CreatePlanForm() {
                                     onBlur={onBlur}
                                     value={value}
                                     className="w-full"
+                                    error={!!errors.title}
+                                />
+                                <ErrorMessage
+                                    errors={errors}
+                                    name="title"
+                                    render={({ message }) => (
+                                        <p className="text-red-500">
+                                            {message}
+                                        </p>
+                                    )}
                                 />
                             </Box>
                         )}
@@ -189,7 +205,6 @@ export default function CreatePlanForm() {
                                                     onChange,
                                                     onBlur,
                                                     value,
-                                                    ref,
                                                 },
                                             }) => (
                                                 <>
@@ -201,6 +216,23 @@ export default function CreatePlanForm() {
                                                         onBlur={onBlur}
                                                         onChange={onChange}
                                                         value={value}
+                                                        error={
+                                                            errors.exercises &&
+                                                            Object.values(
+                                                                errors.exercises
+                                                            )[index]?.title
+                                                        }
+                                                    />
+                                                    <ErrorMessage
+                                                        errors={errors}
+                                                        name={`exercises.${index}.title`}
+                                                        render={() => (
+                                                            <p className="text-red-500">
+                                                                Title for the
+                                                                exercise is
+                                                                required
+                                                            </p>
+                                                        )}
                                                     />
                                                 </>
                                             )}
@@ -227,6 +259,23 @@ export default function CreatePlanForm() {
                                                         onBlur={onBlur}
                                                         onChange={onChange}
                                                         value={value}
+                                                        error={
+                                                            errors.exercises &&
+                                                            Object.values(
+                                                                errors.exercises
+                                                            )[index]
+                                                                ?.description
+                                                        }
+                                                    />
+                                                    <ErrorMessage
+                                                        errors={errors}
+                                                        name={`exercises.${index}.description`}
+                                                        render={() => (
+                                                            <p className="text-red-500">
+                                                                Description is
+                                                                required
+                                                            </p>
+                                                        )}
                                                     />
                                                 </>
                                             )}
@@ -370,7 +419,12 @@ export default function CreatePlanForm() {
                         </Box>
                     )}
                 </Box>
-                <Button color="primary" variant="contained" type="submit">
+                <Button
+                    color="primary"
+                    variant="contained"
+                    type="submit"
+                    disabled={!isValid}
+                >
                     Create
                 </Button>
             </form>
