@@ -42,7 +42,6 @@ export default function CreatePlanForm() {
     const { user } = useUser();
     const {
         control,
-        register,
         handleSubmit,
         watch,
         formState: { errors },
@@ -128,204 +127,252 @@ export default function CreatePlanForm() {
                         width: '100%',
                     }}
                 >
-                    <Typography variant="h3" component="h3">
-                        Exercises
-                    </Typography>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            width: '100%',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Typography variant="h3" component="h3">
+                            Exercises
+                        </Typography>
+                        <Button
+                            onClick={() => append({ ...defaultExerciseValues })}
+                            variant="contained"
+                            startIcon={<Add />}
+                        >
+                            Add Exercise
+                        </Button>
+                    </Box>
                     <Divider />
                 </Box>
-                <ul className="flex w-full gap-6 flex-wrap justify-start">
-                    {fields.map((item, index) => {
-                        const isExerciseOnOwnBodyWeight = watch(
-                            `exercises.${index}.isOwnBodyweight`
-                        )!;
-                        return (
-                            <li key={item.id}>
-                                <Card
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        width: '100%',
-                                        flexGrow: '1',
-                                        padding: '2rem',
-                                    }}
-                                >
-                                    <Controller
-                                        control={control}
-                                        name={`exercises.${index}.title`}
-                                        rules={{
-                                            required: true,
+                <Box
+                    component="ul"
+                    sx={{
+                        display: 'grid',
+                        gridGap: '2rem',
+                        width: '100%',
+                        gridTemplateColumns: {
+                            xs: 'repeat(1, minmax(0,1fr))',
+                            md: 'repeat(2, minmax(0,1fr))',
+                            lg: 'repeat(3, minmax(0,1fr))',
+                        },
+                    }}
+                >
+                    {fields.length ? (
+                        fields.map((item, index) => {
+                            const isExerciseOnOwnBodyWeight = watch(
+                                `exercises.${index}.isOwnBodyweight`
+                            )!;
+                            return (
+                                <li key={item.id}>
+                                    <Card
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            width: '100%',
+                                            flexGrow: '1',
+                                            gap: '0.5rem',
+                                            padding: '2rem',
                                         }}
-                                        render={({
-                                            field: {
-                                                onChange,
-                                                onBlur,
-                                                value,
-                                                ref,
-                                            },
-                                        }) => (
-                                            <>
-                                                <InputLabel>Title</InputLabel>
-                                                <OutlinedInput
-                                                    placeholder="Title"
-                                                    onBlur={onBlur}
-                                                    onChange={onChange}
-                                                    value={value}
-                                                />
-                                            </>
-                                        )}
-                                    />
-                                    <Controller
-                                        control={control}
-                                        name={`exercises.${index}.description`}
-                                        rules={{
-                                            required: true,
-                                        }}
-                                        render={({
-                                            field: {
-                                                onChange,
-                                                onBlur,
-                                                value,
-                                                ref,
-                                            },
-                                        }) => (
-                                            <>
-                                                <InputLabel>
-                                                    Description
-                                                </InputLabel>
-                                                <OutlinedInput
-                                                    placeholder="Description"
-                                                    onBlur={onBlur}
-                                                    onChange={onChange}
-                                                    value={value}
-                                                />
-                                            </>
-                                        )}
-                                    />
-                                    <Controller
-                                        control={control}
-                                        name={`exercises.${index}.reps`}
-                                        rules={{
-                                            required: true,
-                                        }}
-                                        render={({
-                                            field: {
-                                                onChange,
-                                                onBlur,
-                                                value,
-                                                ref,
-                                            },
-                                        }) => (
-                                            <>
-                                                <InputLabel>Reps</InputLabel>
-                                                <OutlinedInput
-                                                    placeholder="Reps"
-                                                    onBlur={onBlur}
-                                                    onChange={onChange}
-                                                    value={value}
-                                                    type="number"
-                                                />
-                                            </>
-                                        )}
-                                    />
-                                    <Controller
-                                        control={control}
-                                        name={`exercises.${index}.series`}
-                                        rules={{
-                                            required: true,
-                                        }}
-                                        render={({
-                                            field: {
-                                                onChange,
-                                                onBlur,
-                                                value,
-                                                ref,
-                                            },
-                                        }) => (
-                                            <>
-                                                <InputLabel>Series</InputLabel>
-                                                <OutlinedInput
-                                                    placeholder="Title"
-                                                    onBlur={onBlur}
-                                                    onChange={onChange}
-                                                    value={value}
-                                                />
-                                            </>
-                                        )}
-                                    />
-                                    <Controller
-                                        control={control}
-                                        name={`exercises.${index}.isOwnBodyweight`}
-                                        render={({
-                                            field: { onChange, onBlur, value },
-                                        }) => (
-                                            <FormControlLabel
-                                                control={
-                                                    <Switch
-                                                        defaultChecked
+                                    >
+                                        <Controller
+                                            control={control}
+                                            name={`exercises.${index}.title`}
+                                            rules={{
+                                                required: true,
+                                            }}
+                                            render={({
+                                                field: {
+                                                    onChange,
+                                                    onBlur,
+                                                    value,
+                                                    ref,
+                                                },
+                                            }) => (
+                                                <>
+                                                    <InputLabel>
+                                                        Title
+                                                    </InputLabel>
+                                                    <OutlinedInput
+                                                        placeholder="Title"
+                                                        onBlur={onBlur}
                                                         onChange={onChange}
                                                         value={value}
                                                     />
-                                                }
-                                                label="Own body weight"
-                                            />
-                                        )}
-                                    />
-                                    <Controller
-                                        control={control}
-                                        name={`exercises.${index}.weight`}
-                                        rules={{
-                                            required:
-                                                !isExerciseOnOwnBodyWeight,
-                                        }}
-                                        render={({
-                                            field: {
-                                                onChange,
-                                                onBlur,
-                                                value,
-                                                ref,
-                                            },
-                                        }) => (
-                                            <>
-                                                <InputLabel>Weight</InputLabel>
-                                                <OutlinedInput
-                                                    placeholder="Weight"
-                                                    onBlur={onBlur}
-                                                    onChange={onChange}
-                                                    value={value}
-                                                    type="number"
-                                                    disabled={
-                                                        isExerciseOnOwnBodyWeight!
-                                                    }
-                                                />
-                                            </>
-                                        )}
-                                    />
-                                    <div>
-                                        <IconButton
-                                            aria-label="Add exercise"
-                                            onClick={() => {
-                                                append({
-                                                    ...defaultExerciseValues,
-                                                });
+                                                </>
+                                            )}
+                                        />
+                                        <Controller
+                                            control={control}
+                                            name={`exercises.${index}.description`}
+                                            rules={{
+                                                required: true,
                                             }}
-                                        >
-                                            <Add />
-                                        </IconButton>
-                                        {index !== 0 && (
+                                            render={({
+                                                field: {
+                                                    onChange,
+                                                    onBlur,
+                                                    value,
+                                                },
+                                            }) => (
+                                                <>
+                                                    <InputLabel>
+                                                        Description
+                                                    </InputLabel>
+                                                    <OutlinedInput
+                                                        placeholder="Description"
+                                                        onBlur={onBlur}
+                                                        onChange={onChange}
+                                                        value={value}
+                                                    />
+                                                </>
+                                            )}
+                                        />
+                                        <Controller
+                                            control={control}
+                                            name={`exercises.${index}.reps`}
+                                            rules={{
+                                                required: true,
+                                            }}
+                                            render={({
+                                                field: {
+                                                    onChange,
+                                                    onBlur,
+                                                    value,
+                                                    ref,
+                                                },
+                                            }) => (
+                                                <>
+                                                    <InputLabel>
+                                                        Reps
+                                                    </InputLabel>
+                                                    <OutlinedInput
+                                                        placeholder="Reps"
+                                                        onBlur={onBlur}
+                                                        onChange={onChange}
+                                                        value={value}
+                                                        type="number"
+                                                    />
+                                                </>
+                                            )}
+                                        />
+                                        <Controller
+                                            control={control}
+                                            name={`exercises.${index}.series`}
+                                            rules={{
+                                                required: true,
+                                            }}
+                                            render={({
+                                                field: {
+                                                    onChange,
+                                                    onBlur,
+                                                    value,
+                                                    ref,
+                                                },
+                                            }) => (
+                                                <>
+                                                    <InputLabel>
+                                                        Series
+                                                    </InputLabel>
+                                                    <OutlinedInput
+                                                        placeholder="Title"
+                                                        onBlur={onBlur}
+                                                        onChange={onChange}
+                                                        value={value}
+                                                    />
+                                                </>
+                                            )}
+                                        />
+                                        <Controller
+                                            control={control}
+                                            name={`exercises.${index}.isOwnBodyweight`}
+                                            render={({
+                                                field: { onChange, value },
+                                            }) => (
+                                                <FormControlLabel
+                                                    control={
+                                                        <Switch
+                                                            onChange={onChange}
+                                                            value={value}
+                                                        />
+                                                    }
+                                                    label="Own body weight"
+                                                />
+                                            )}
+                                        />
+                                        <Controller
+                                            control={control}
+                                            name={`exercises.${index}.weight`}
+                                            rules={{
+                                                required:
+                                                    !isExerciseOnOwnBodyWeight,
+                                            }}
+                                            render={({
+                                                field: {
+                                                    onChange,
+                                                    onBlur,
+                                                    value,
+                                                    ref,
+                                                },
+                                            }) => (
+                                                <>
+                                                    <InputLabel>
+                                                        Weight
+                                                    </InputLabel>
+                                                    <OutlinedInput
+                                                        placeholder="Weight"
+                                                        onBlur={onBlur}
+                                                        onChange={onChange}
+                                                        value={value}
+                                                        type="number"
+                                                        disabled={
+                                                            isExerciseOnOwnBodyWeight!
+                                                        }
+                                                    />
+                                                </>
+                                            )}
+                                        />
+                                        <div>
+                                            {(index === fields.length - 1 ||
+                                                (index === 0 &&
+                                                    fields.length === 1)) && (
+                                                <IconButton
+                                                    aria-label="Add exercise"
+                                                    onClick={() => {
+                                                        append({
+                                                            ...defaultExerciseValues,
+                                                        });
+                                                    }}
+                                                >
+                                                    <Add />
+                                                </IconButton>
+                                            )}
+
                                             <IconButton
                                                 aria-label="Add exercise"
                                                 onClick={() => remove(index)}
                                             >
                                                 <Remove />
                                             </IconButton>
-                                        )}
-                                    </div>
-                                </Card>
-                            </li>
-                        );
-                    })}
-                </ul>
-                <button type="submit">Submit</button>
+                                        </div>
+                                    </Card>
+                                </li>
+                            );
+                        })
+                    ) : (
+                        <Box>
+                            <Typography variant="h4" component="h4">
+                                No exercises.
+                            </Typography>
+                        </Box>
+                    )}
+                </Box>
+                <Button color="primary" variant="contained" type="submit">
+                    Create
+                </Button>
             </form>
         </>
     );
