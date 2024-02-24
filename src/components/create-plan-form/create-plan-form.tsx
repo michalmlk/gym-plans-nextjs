@@ -6,7 +6,7 @@ import {
     useFieldArray,
     Controller,
 } from 'react-hook-form';
-import Input from '@mui/material/Input';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -17,6 +17,9 @@ import { ExerciseDTO } from '@/app/common/model';
 import { useUser } from '@clerk/nextjs';
 import { Add, NoteAdd, Remove } from '@mui/icons-material';
 import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import PageHeader from '../page-header/page-header';
 
 type FormValues = {
     title: string;
@@ -26,10 +29,17 @@ type FormValues = {
     exercises: Omit<ExerciseDTO, 'id'>[];
 };
 
+export const defaultExerciseValues = {
+    name: '',
+    description: '',
+    isOwnBodyWeight: false,
+    reps: 0,
+    series: 1,
+    weight: 0,
+};
+
 export default function CreatePlanForm() {
     const { user } = useUser();
-
-    console.log('data:', user?.id);
     const {
         control,
         register,
@@ -64,63 +74,84 @@ export default function CreatePlanForm() {
     });
 
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-6 items-center"
-        >
-            <Controller
-                control={control}
-                name="title"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                        type="text"
-                        placeholder="Title"
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        value={value}
+        <>
+            <PageHeader title="Create plan" />
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="flex flex-col gap-6 items-center"
+            >
+                <Box
+                    sx={{
+                        display: 'flex',
+                        width: '100%',
+                        justifyContent: 'space-between',
+                        gap: '2rem;',
+                    }}
+                >
+                    <Controller
+                        control={control}
+                        name="title"
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <Box sx={{ width: '50%' }}>
+                                <InputLabel>Plan title</InputLabel>
+                                <OutlinedInput
+                                    type="text"
+                                    placeholder="Title"
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    className="w-full"
+                                />
+                            </Box>
+                        )}
                     />
-                )}
-            />
-            <Controller
-                control={control}
-                name="description"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                        type="text"
-                        placeholder="Description"
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        value={value}
+                    <Controller
+                        control={control}
+                        name="description"
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <Box sx={{ width: '50%' }}>
+                                <InputLabel>Description</InputLabel>
+                                <OutlinedInput
+                                    type="text"
+                                    placeholder="Description"
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    className="w-full"
+                                />
+                            </Box>
+                        )}
                     />
-                )}
-            />
-            <ul className="flex gap-6 w-full flex-wrap justify-center">
-                {fields.map((item, index) => {
-                    const isExerciseOnOwnBodyWeight = watch(
-                        `exercises[${index}].isOwnBodyweight`
-                    )!;
-                    return (
-                        <li key={item.id}>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                }}
-                            >
+                </Box>
+                <Box
+                    sx={{
+                        width: '100%',
+                    }}
+                >
+                    <Typography variant="h3" component="h3">
+                        Exercises
+                    </Typography>
+                    <Divider />
+                </Box>
+                <ul className="flex w-full gap-6 flex-wrap justify-start">
+                    {fields.map((item, index) => {
+                        const isExerciseOnOwnBodyWeight = watch(
+                            `exercises.${index}.isOwnBodyweight`
+                        )!;
+                        return (
+                            <li key={item.id}>
                                 <Card
                                     sx={{
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        gap: '1rem',
                                         width: '100%',
-                                        minWidth: '540px',
                                         flexGrow: '1',
                                         padding: '2rem',
                                     }}
                                 >
                                     <Controller
                                         control={control}
-                                        name={`exercises[${index}].title`}
+                                        name={`exercises.${index}.title`}
                                         rules={{
                                             required: true,
                                         }}
@@ -134,7 +165,7 @@ export default function CreatePlanForm() {
                                         }) => (
                                             <>
                                                 <InputLabel>Title</InputLabel>
-                                                <Input
+                                                <OutlinedInput
                                                     placeholder="Title"
                                                     onBlur={onBlur}
                                                     onChange={onChange}
@@ -145,7 +176,7 @@ export default function CreatePlanForm() {
                                     />
                                     <Controller
                                         control={control}
-                                        name={`exercises[${index}].description`}
+                                        name={`exercises.${index}.description`}
                                         rules={{
                                             required: true,
                                         }}
@@ -161,7 +192,7 @@ export default function CreatePlanForm() {
                                                 <InputLabel>
                                                     Description
                                                 </InputLabel>
-                                                <Input
+                                                <OutlinedInput
                                                     placeholder="Description"
                                                     onBlur={onBlur}
                                                     onChange={onChange}
@@ -172,7 +203,7 @@ export default function CreatePlanForm() {
                                     />
                                     <Controller
                                         control={control}
-                                        name={`exercises[${index}].reps`}
+                                        name={`exercises.${index}.reps`}
                                         rules={{
                                             required: true,
                                         }}
@@ -186,7 +217,7 @@ export default function CreatePlanForm() {
                                         }) => (
                                             <>
                                                 <InputLabel>Reps</InputLabel>
-                                                <Input
+                                                <OutlinedInput
                                                     placeholder="Reps"
                                                     onBlur={onBlur}
                                                     onChange={onChange}
@@ -198,7 +229,7 @@ export default function CreatePlanForm() {
                                     />
                                     <Controller
                                         control={control}
-                                        name={`exercises[${index}].series`}
+                                        name={`exercises.${index}.series`}
                                         rules={{
                                             required: true,
                                         }}
@@ -212,7 +243,7 @@ export default function CreatePlanForm() {
                                         }) => (
                                             <>
                                                 <InputLabel>Series</InputLabel>
-                                                <Input
+                                                <OutlinedInput
                                                     placeholder="Title"
                                                     onBlur={onBlur}
                                                     onChange={onChange}
@@ -223,7 +254,7 @@ export default function CreatePlanForm() {
                                     />
                                     <Controller
                                         control={control}
-                                        name={`exercises[${index}].isOwnBodyweight`}
+                                        name={`exercises.${index}.isOwnBodyweight`}
                                         render={({
                                             field: { onChange, onBlur, value },
                                         }) => (
@@ -241,7 +272,7 @@ export default function CreatePlanForm() {
                                     />
                                     <Controller
                                         control={control}
-                                        name={`exercises[${index}].weight`}
+                                        name={`exercises.${index}.weight`}
                                         rules={{
                                             required:
                                                 !isExerciseOnOwnBodyWeight,
@@ -256,7 +287,7 @@ export default function CreatePlanForm() {
                                         }) => (
                                             <>
                                                 <InputLabel>Weight</InputLabel>
-                                                <Input
+                                                <OutlinedInput
                                                     placeholder="Weight"
                                                     onBlur={onBlur}
                                                     onChange={onChange}
@@ -273,8 +304,9 @@ export default function CreatePlanForm() {
                                         <IconButton
                                             aria-label="Add exercise"
                                             onClick={() => {
-                                                console.log(item);
-                                                append({ ...item });
+                                                append({
+                                                    ...defaultExerciseValues,
+                                                });
                                             }}
                                         >
                                             <Add />
@@ -289,14 +321,12 @@ export default function CreatePlanForm() {
                                         )}
                                     </div>
                                 </Card>
-                            </Box>
-                        </li>
-                    );
-                })}
-            </ul>
-            <Button variant="contained" type="submit" startIcon={<NoteAdd />}>
-                Create
-            </Button>
-        </form>
+                            </li>
+                        );
+                    })}
+                </ul>
+                <button type="submit">Submit</button>
+            </form>
+        </>
     );
 }
