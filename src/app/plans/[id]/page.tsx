@@ -6,6 +6,7 @@ import { getExercisesFromPlan } from '@/utils/exercises';
 
 async function Exercises({ id }: { id: string }) {
     const exercises = await getExercisesFromPlan(parseInt(id));
+    console.log(exercises);
     return (
         <main>
             {exercises && exercises.length

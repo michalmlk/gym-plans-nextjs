@@ -20,7 +20,7 @@ export const getExercisesFromPlan = async (
             const { documents } = await appwriteDatabase.listDocuments(
                 process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
                 'excercise',
-                [Query.equal('id', currentPlan.exerciseIds)]
+                [Query.equal('name', currentPlan.exerciseIds)]
             );
 
             return documents as unknown as ExerciseDTO[];

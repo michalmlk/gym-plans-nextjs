@@ -2,35 +2,35 @@ import React from 'react';
 import PlanItem from '../plan-item/plan-item';
 import Box from '@mui/material/Box';
 import { PlanDTO } from '@/app/common/model';
+import { getPlans } from '@/utils/plans';
 
-export default function PlansGrid(plans: PlanDTO[]): React.ReactElement {
+export default async function PlansGrid(): Promise<React.ReactElement> {
+    const plans: PlanDTO[] = await getPlans();
     return (
         <Box
+            component="div"
             sx={{
-                display: 'flex',
-                flexDirection: {
-                    xs: 'column',
-                    md: 'row',
+                display: 'grid',
+                gridGap: '2rem',
+                width: '100%',
+                gridTemplateColumns: {
+                    xs: 'repeat(1, minmax(0,1fr))',
+                    md: 'repeat(2, minmax(0,1fr))',
                 },
-                gap: '2rem',
-                justifyContent: 'center',
-                alignItems: 'center',
             }}
         >
             {plans.length &&
-                plans.map(
-                    ({ title, description, author, id, tags, userId }) => (
-                        <PlanItem
-                            key={id}
-                            title={title}
-                            description={description}
-                            author={author}
-                            id={id}
-                            tags={tags}
-                            userId={userId}
-                        />
-                    )
-                )}
+                plans.map(({ title, description, id, tags, userId }) => (
+                    <PlanItem
+                        key={id}
+                        title={title}
+                        description={description || ''}
+                        author={userId}
+                        id={id}
+                        tags={tags}
+                        userId={userId}
+                    />
+                ))}
         </Box>
     );
 }

@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import {
     useForm,
@@ -16,7 +17,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { ExerciseDTO } from '@/app/common/model';
 import { useUser } from '@clerk/nextjs';
-import { Add, NoteAdd, Remove } from '@mui/icons-material';
+import { Add, Remove } from '@mui/icons-material';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
