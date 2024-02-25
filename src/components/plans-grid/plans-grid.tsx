@@ -20,13 +20,13 @@ export default async function PlansGrid(): Promise<React.ReactElement> {
             }}
         >
             {plans.length &&
-                plans.map(({ title, description, id, tags, userId }) => (
+                plans.map(({ title, description, tags, userId, $id }) => (
                     <PlanItem
-                        key={id}
+                        key={$id}
                         title={title}
                         description={description || ''}
                         author={userId}
-                        id={id}
+                        id={$id}
                         tags={tags}
                         userId={userId}
                     />

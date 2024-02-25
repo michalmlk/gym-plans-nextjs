@@ -5,12 +5,11 @@ import { PageParams } from '@/app/common/model';
 import { getExercisesFromPlan } from '@/utils/exercises';
 
 async function Exercises({ id }: { id: string }) {
-    const exercises = await getExercisesFromPlan(parseInt(id));
-    console.log(exercises);
+    const exercises = await getExercisesFromPlan(id);
     return (
         <main>
             {exercises && exercises.length
-                ? exercises.map((e) => <p key={e.id}>{e.name}</p>)
+                ? exercises.map((e) => <p key={e.$id}>{e.name}</p>)
                 : 'No excercises'}
         </main>
     );

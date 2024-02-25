@@ -14,7 +14,7 @@ export type PlanItemProps = {
     title: string;
     tags: string[];
     description: string;
-    id: number;
+    id: string;
     author: string;
     userId: string;
 };
@@ -24,11 +24,9 @@ export default async function PlanItem({
     description,
     id,
     tags,
-    author,
     userId,
 }: PlanItemProps) {
     const user = await clerkClient.users.getUser(userId);
-    console.log(user);
     return (
         <Box
             sx={{

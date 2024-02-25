@@ -1,21 +1,22 @@
+import sdk from 'node-appwrite';
+
 export type PlanDTO = {
-    id: number;
     title: string;
     description?: string;
     tags: string[];
     userId: string;
     exerciseIds: string[];
-};
+} & sdk.Models.Document;
 
 export type ExerciseDTO = {
-    id: number;
+    planId: string;
     name: string;
     description: string;
     isOwnBodyWeight: boolean;
     reps: number;
     series: number;
     weight?: number;
-};
+} & sdk.Models.Document;
 
 export type PageParams = {
     [key: string]: any;

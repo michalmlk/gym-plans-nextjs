@@ -25,13 +25,16 @@ import PageHeader from '../page-header/page-header';
 import { createPlan } from '@/utils/plans';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
+import { createExercises } from '@/utils/exercises';
+import { ID } from 'appwrite';
 
 type FormValues = {
+    $id: string;
     title: string;
     description?: string;
     tags: string[];
     userId: string;
-    exercises: Omit<ExerciseDTO, 'id'>[];
+    exercises: ExerciseDTO[];
 };
 
 export const defaultExerciseValues = {
@@ -66,6 +69,7 @@ export default function CreatePlanForm() {
             exercises: [
                 {
                     name: '',
+                    planId: '123',
                     description: '',
                     isOwnBodyWeight: false,
                     reps: 0,
@@ -78,16 +82,19 @@ export default function CreatePlanForm() {
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         setIsLoading(true);
+        const id = ID.unique();
+        console.log(id);
         try {
             await createPlan({
                 ...data,
-                id: Math.random() * 1000,
+                $id: id,
                 userId: user?.id!,
-                exerciseIds: data.exercises.map((d) => d.name),
+                exerciseIds: [],
             });
+            await createExercises(data.exercises, id);
             alert('plan successfully created');
-        } catch (e) {
-            console.log('Error occurred.');
+        } catch (e: any) {
+            console.log('Error occurred.', e.message);
         } finally {
             setIsLoading(false);
             handleSnackbarOpen();
@@ -210,7 +217,7 @@ export default function CreatePlanForm() {
                     {fields.length ? (
                         fields.map((item, index) => {
                             const isExerciseOnOwnBodyWeight = watch(
-                                `exercises.${index}.isOwnBodyweight`
+                                `exercises.${index}.isOwnBodyWeight`
                             )!;
                             return (
                                 <li key={item.id}>
@@ -226,7 +233,7 @@ export default function CreatePlanForm() {
                                     >
                                         <Controller
                                             control={control}
-                                            name={`exercises.${index}.title`}
+                                            name={`exercises.${index}.name`}
                                             rules={{
                                                 required: true,
                                             }}

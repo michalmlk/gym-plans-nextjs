@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import { databases } from '@/database/appwrite';
-import { Query } from 'node-appwrite';
 import { currentUser } from '@clerk/nextjs';
 
 export async function GET() {

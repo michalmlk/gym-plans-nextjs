@@ -2,32 +2,35 @@ import { ID } from 'appwrite';
 import { appwriteDatabase } from './appwrite';
 import { PlanDTO } from '@/app/common/model';
 
-export const getPlans = async (): Promise<PlanDTO[]> => {
-    const { documents } = await appwriteDatabase.listDocuments(
+export const getPlans = async (): Promise<Array<PlanDTO>> => {
+    const { documents } = await appwriteDatabase.listDocuments<PlanDTO>(
         process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
         'plans'
     );
-    const plans = documents as unknown as PlanDTO[];
-    return plans;
+    return documents;
 };
 
-export const getPlan = async (planId: number): Promise<PlanDTO> => {
-    const currentPlan = await appwriteDatabase.getDocument(
+export const getPlan = async (planId: string): Promise<PlanDTO> => {
+    const currentPlan = await appwriteDatabase.getDocument<PlanDTO>(
         process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
         'plans',
-        planId.toString()
+        planId
     );
-    return currentPlan as unknown as PlanDTO;
+    return currentPlan;
 };
 
-export const createPlan = async (data: PlanDTO): Promise<void> => {
+export const createPlan = async (
+    data: Pick<
+        PlanDTO,
+        'title' | 'description' | 'tags' | 'userId' | 'exerciseIds' | '$id'
+    >
+): Promise<void> => {
     try {
         await appwriteDatabase.createDocument(
             process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
             'plans',
             ID.unique(),
             {
-                id: Math.floor(Math.random() * 1000),
                 title: data.title,
                 description: data.description,
                 tags: [],
