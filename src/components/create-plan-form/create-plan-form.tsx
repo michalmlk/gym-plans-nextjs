@@ -25,8 +25,8 @@ import PageHeader from '../page-header/page-header';
 import { createPlan } from '@/utils/plans';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
-import { createExercises } from '@/utils/exercises';
-import { ID } from 'appwrite';
+import { createExercises, appendExercisesToPlan } from '@/utils/exercises';
+import { v1 as uuidv1 } from 'uuid';
 
 type FormValues = {
     $id: string;
@@ -69,7 +69,7 @@ export default function CreatePlanForm() {
             exercises: [
                 {
                     name: '',
-                    planId: '123',
+                    planId: '',
                     description: '',
                     isOwnBodyWeight: false,
                     reps: 0,
@@ -82,16 +82,17 @@ export default function CreatePlanForm() {
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         setIsLoading(true);
-        const id = ID.unique();
+        const id = uuidv1();
         console.log(id);
         try {
             await createPlan({
                 ...data,
-                $id: id,
+                id,
                 userId: user?.id!,
                 exerciseIds: [],
             });
-            await createExercises(data.exercises, id);
+            const exercisesIds = await createExercises(data.exercises, id);
+            await appendExercisesToPlan(exercisesIds, id);
             alert('plan successfully created');
         } catch (e: any) {
             console.log('Error occurred.', e.message);
@@ -374,7 +375,7 @@ export default function CreatePlanForm() {
                                         />
                                         <Controller
                                             control={control}
-                                            name={`exercises.${index}.isOwnBodyweight`}
+                                            name={`exercises.${index}.isOwnBodyWeight`}
                                             render={({
                                                 field: { onChange, value },
                                             }) => (

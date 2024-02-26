@@ -22,7 +22,7 @@ export const getPlan = async (planId: string): Promise<PlanDTO> => {
 export const createPlan = async (
     data: Pick<
         PlanDTO,
-        'title' | 'description' | 'tags' | 'userId' | 'exerciseIds' | '$id'
+        'title' | 'description' | 'tags' | 'userId' | 'exerciseIds' | 'id'
     >
 ): Promise<void> => {
     try {
@@ -31,6 +31,7 @@ export const createPlan = async (
             'plans',
             ID.unique(),
             {
+                id: data.id,
                 title: data.title,
                 description: data.description,
                 tags: [],
