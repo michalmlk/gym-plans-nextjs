@@ -1,6 +1,7 @@
 import sdk from 'node-appwrite';
 
 export type PlanDTO = {
+    id: string;
     title: string;
     description?: string;
     tags: string[];
@@ -18,6 +19,13 @@ export type ExerciseDTO = {
     weight?: number;
 } & sdk.Models.Document;
 
-export type PageParams = {
-    [key: string]: any;
-};
+export type CreateExerciseDTO = Pick<
+    ExerciseDTO,
+    | 'planId'
+    | 'name'
+    | 'description'
+    | 'isOwnBodyWeight'
+    | 'reps'
+    | 'series'
+    | 'weight'
+>;

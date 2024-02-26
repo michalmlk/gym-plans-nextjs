@@ -79,7 +79,7 @@ export default async function PlanItem({
                 </CardContent>
                 <CardActions className="flex justify-end">
                     <Link href={`/plans/${id}`} passHref>
-                        <Button variant="outlined" color="primary">
+                        <Button variant="contained" color="primary">
                             Details
                         </Button>
                     </Link>

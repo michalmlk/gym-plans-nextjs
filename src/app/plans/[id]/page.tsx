@@ -1,28 +1,26 @@
 import Container from '@mui/material/Container';
 import { Suspense } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
-import { PageParams } from '@/app/common/model';
-import { getExercisesFromPlan } from '@/utils/exercises';
+import ExercisesGrid from '@/components/exercises-grid/exercises-grid';
+import PageHeader from '@/components/page-header/page-header';
+import Link from 'next/link';
+import IconButton from '@mui/material/IconButton';
+import ArrowBack from '@mui/icons-material/ArrowBack';
 
-async function Exercises({ id }: { id: string }) {
-    const exercises = await getExercisesFromPlan(id);
-    return (
-        <main>
-            {exercises && exercises.length
-                ? exercises.map((e) => <p key={e.$id}>{e.name}</p>)
-                : 'No excercises'}
-        </main>
-    );
-}
-
-export default function PlanPage({ params }: PageParams) {
+export default function PlanPage({ params }) {
     const { id } = params;
 
     return (
         <Container className="p-24">
-            <header>This is plan with id: {id}</header>
+            <PageHeader title="Details">
+                <Link href="/plans" passHref>
+                    <IconButton>
+                        <ArrowBack />
+                    </IconButton>
+                </Link>
+            </PageHeader>
             <Suspense fallback={<LinearProgress />}>
-                <Exercises id={id} />
+                <ExercisesGrid id={id} />
             </Suspense>
         </Container>
     );

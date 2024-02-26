@@ -15,7 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { ExerciseDTO } from '@/app/common/model';
+import { ExerciseDTO, CreateExerciseDTO } from '@/app/common/model';
 import { useUser } from '@clerk/nextjs';
 import { Add, Remove } from '@mui/icons-material';
 import Card from '@mui/material/Card';
@@ -27,6 +27,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import { createExercises, appendExercisesToPlan } from '@/utils/exercises';
 import { v1 as uuidv1 } from 'uuid';
+import ArrowBack from '@mui/icons-material/ArrowBack';
+import Link from 'next/link';
 
 type FormValues = {
     $id: string;
@@ -115,7 +117,13 @@ export default function CreatePlanForm() {
                 onClose={() => setIsSnackbarOpen(false)}
                 message="Plan successfully created"
             />
-            <PageHeader title="Create plan" />
+            <PageHeader title="Create plan">
+                <Link href="/plans" passHref>
+                    <IconButton>
+                        <ArrowBack />
+                    </IconButton>
+                </Link>
+            </PageHeader>
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-6 items-center"
@@ -329,7 +337,6 @@ export default function CreatePlanForm() {
                                                     onChange,
                                                     onBlur,
                                                     value,
-                                                    ref,
                                                 },
                                             }) => (
                                                 <>
@@ -357,7 +364,6 @@ export default function CreatePlanForm() {
                                                     onChange,
                                                     onBlur,
                                                     value,
-                                                    ref,
                                                 },
                                             }) => (
                                                 <>
@@ -369,6 +375,7 @@ export default function CreatePlanForm() {
                                                         onBlur={onBlur}
                                                         onChange={onChange}
                                                         value={value}
+                                                        type="number"
                                                     />
                                                 </>
                                             )}
@@ -402,7 +409,6 @@ export default function CreatePlanForm() {
                                                     onChange,
                                                     onBlur,
                                                     value,
-                                                    ref,
                                                 },
                                             }) => (
                                                 <>

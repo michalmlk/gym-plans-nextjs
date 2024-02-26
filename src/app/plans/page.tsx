@@ -12,7 +12,7 @@ export default function PlansPage() {
             <div className="flex flex-col gap-5">
                 <PageHeader title="Plans">
                     <Link href="/plans/create" passHref>
-                        <Button variant="outlined">Crete your own plan</Button>
+                        <Button variant="contained">Crete your own plan</Button>
                     </Link>
                 </PageHeader>
                 <Suspense fallback={<LinearProgress />}>
