@@ -1,10 +1,10 @@
 'use client';
+
 import { useState } from 'react';
 import { ExerciseDTO } from '@/app/common/model';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';

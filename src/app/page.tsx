@@ -1,5 +1,5 @@
 import React from 'react';
-import PageHeader from '@/components/page-header/page-header';
+import PageHeader from '@/components/shared/page-header/page-header';
 import Container from '@mui/material/Container';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import Image from 'next/image';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
-import BannerItem from '@/components/banner-item/banner-item';
+import BannerItem from '@/components/shared/banner-item/banner-item';
 import Button from '@mui/material/Button';
 
 export default async function Home() {

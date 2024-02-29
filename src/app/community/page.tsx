@@ -1,5 +1,5 @@
 import Container from '@mui/material/Container';
-import PageHeader from '@/components/page-header/page-header';
+import PageHeader from '@/components/shared/page-header/page-header';
 
 export default function ComunityPage() {
     return (

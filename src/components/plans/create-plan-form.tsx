@@ -21,7 +21,7 @@ import { Add, Remove } from '@mui/icons-material';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import PageHeader from '../page-header/page-header';
+import PageHeader from '../shared/page-header/page-header';
 import { createPlan } from '@/utils/plans';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
@@ -29,6 +29,7 @@ import { createExercises, appendExercisesToPlan } from '@/utils/exercises';
 import { v1 as uuidv1 } from 'uuid';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
+import Router from 'next/router';
 
 type FormValues = {
     $id: string;
@@ -59,6 +60,7 @@ export default function CreatePlanForm() {
         control,
         handleSubmit,
         watch,
+        reset,
         formState: { errors, isValid },
     } = useForm<FormValues>({
         reValidateMode: 'onChange',
@@ -85,7 +87,6 @@ export default function CreatePlanForm() {
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         setIsLoading(true);
         const id = uuidv1();
-        console.log(id);
         try {
             await createPlan({
                 ...data,
@@ -95,7 +96,8 @@ export default function CreatePlanForm() {
             });
             const exercisesIds = await createExercises(data.exercises, id);
             await appendExercisesToPlan(exercisesIds, id);
-            alert('plan successfully created');
+            reset();
+            Router.reload();
         } catch (e: any) {
             console.log('Error occurred.', e.message);
         } finally {

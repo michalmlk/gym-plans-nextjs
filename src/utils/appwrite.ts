@@ -1,4 +1,4 @@
-import { Client, Account, ID, Databases } from 'appwrite';
+import { Client, Account, ID, Databases } from 'node-appwrite';
 export const appwriteClient = new Client()
     .setEndpoint('https://cloud.appwrite.io/v1')
     .setProject('65d382fd04485bc565f6');

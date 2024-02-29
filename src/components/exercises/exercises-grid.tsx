@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import ExerciseItem from '../exercise-item/exercise-item';
+import ExerciseItem from './exercise-item';
 import { getExercisesFromPlan } from '@/utils/exercises';
 
 export default async function ExercisesGrid({ id }: { id: string }) {
