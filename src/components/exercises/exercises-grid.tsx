@@ -8,7 +8,7 @@ export default async function ExercisesGrid({ id }: { id: string }) {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {exercises && exercises.length
                 ? exercises.map((e, idx) => <ExerciseItem key={idx} {...e} />)
-                : 'No excercises'}
+                : 'No exercises'}
         </Box>
     );
 }
