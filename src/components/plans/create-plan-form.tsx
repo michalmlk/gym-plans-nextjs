@@ -15,18 +15,21 @@ import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { ExerciseDTO } from '@/app/common/model';
+import { ExerciseDTO, CreateExerciseDTO } from '@/app/common/model';
 import { useUser } from '@clerk/nextjs';
 import { Add, Remove } from '@mui/icons-material';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import PageHeader from '../page-header/page-header';
+import PageHeader from '../shared/page-header/page-header';
 import { createPlan } from '@/utils/plans';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
-import { createExercises } from '@/utils/exercises';
-import { ID } from 'appwrite';
+import { createExercises, appendExercisesToPlan } from '@/utils/exercises';
+import { v1 as uuidv1 } from 'uuid';
+import ArrowBack from '@mui/icons-material/ArrowBack';
+import Link from 'next/link';
+import Router from 'next/router';
 
 type FormValues = {
     $id: string;
@@ -57,6 +60,7 @@ export default function CreatePlanForm() {
         control,
         handleSubmit,
         watch,
+        reset,
         formState: { errors, isValid },
     } = useForm<FormValues>({
         reValidateMode: 'onChange',
@@ -69,7 +73,7 @@ export default function CreatePlanForm() {
             exercises: [
                 {
                     name: '',
-                    planId: '123',
+                    planId: '',
                     description: '',
                     isOwnBodyWeight: false,
                     reps: 0,
@@ -82,17 +86,18 @@ export default function CreatePlanForm() {
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         setIsLoading(true);
-        const id = ID.unique();
-        console.log(id);
+        const id = uuidv1();
         try {
             await createPlan({
                 ...data,
-                $id: id,
+                id,
                 userId: user?.id!,
                 exerciseIds: [],
             });
-            await createExercises(data.exercises, id);
-            alert('plan successfully created');
+            const exercisesIds = await createExercises(data.exercises, id);
+            await appendExercisesToPlan(exercisesIds, id);
+            reset();
+            Router.reload();
         } catch (e: any) {
             console.log('Error occurred.', e.message);
         } finally {
@@ -114,7 +119,13 @@ export default function CreatePlanForm() {
                 onClose={() => setIsSnackbarOpen(false)}
                 message="Plan successfully created"
             />
-            <PageHeader title="Create plan" />
+            <PageHeader title="Create plan">
+                <Link href="/plans" passHref>
+                    <IconButton>
+                        <ArrowBack />
+                    </IconButton>
+                </Link>
+            </PageHeader>
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-6 items-center"
@@ -328,7 +339,6 @@ export default function CreatePlanForm() {
                                                     onChange,
                                                     onBlur,
                                                     value,
-                                                    ref,
                                                 },
                                             }) => (
                                                 <>
@@ -356,7 +366,6 @@ export default function CreatePlanForm() {
                                                     onChange,
                                                     onBlur,
                                                     value,
-                                                    ref,
                                                 },
                                             }) => (
                                                 <>
@@ -368,13 +377,14 @@ export default function CreatePlanForm() {
                                                         onBlur={onBlur}
                                                         onChange={onChange}
                                                         value={value}
+                                                        type="number"
                                                     />
                                                 </>
                                             )}
                                         />
                                         <Controller
                                             control={control}
-                                            name={`exercises.${index}.isOwnBodyweight`}
+                                            name={`exercises.${index}.isOwnBodyWeight`}
                                             render={({
                                                 field: { onChange, value },
                                             }) => (
@@ -401,7 +411,6 @@ export default function CreatePlanForm() {
                                                     onChange,
                                                     onBlur,
                                                     value,
-                                                    ref,
                                                 },
                                             }) => (
                                                 <>

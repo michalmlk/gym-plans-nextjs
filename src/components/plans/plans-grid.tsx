@@ -1,5 +1,5 @@
 import React from 'react';
-import PlanItem from '../plan-item/plan-item';
+import PlanItem from './plan-item';
 import Box from '@mui/material/Box';
 import { PlanDTO } from '@/app/common/model';
 import { getPlans } from '@/utils/plans';

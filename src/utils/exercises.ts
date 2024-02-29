@@ -1,5 +1,5 @@
 import { ExerciseDTO } from '@/app/common/model';
-import { getPlan } from './plans';
+import { getPlan, getPlans } from './plans';
 import { appwriteDatabase } from './appwrite';
 import { Query, ID } from 'appwrite';
 
@@ -21,7 +21,7 @@ export const getExercisesFromPlan = async (
                 await appwriteDatabase.listDocuments<ExerciseDTO>(
                     process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
                     'excercise',
-                    [Query.equal('planId', currentPlan.$id)]
+                    [Query.equal('planId', currentPlan.id)]
                 );
 
             return documents;
@@ -55,5 +55,27 @@ export const createExercises = async (
         });
     } catch (e) {
         throw new Error();
+    }
+};
+
+export const appendExercisesToPlan = async (
+    exerciseIds: string[],
+    planId: string
+): Promise<void> => {
+    try {
+        const plans = await getPlans();
+        const currentPlan = plans.find((plan) => plan.id === planId);
+        if (currentPlan) {
+            await appwriteDatabase.updateDocument(
+                process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
+                'plans',
+                currentPlan.$id,
+                {
+                    exerciseIds,
+                }
+            );
+        }
+    } catch (e: any) {
+        throw new Error(e.message);
     }
 };

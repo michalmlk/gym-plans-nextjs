@@ -44,25 +44,25 @@ export default async function PlanItem({
                             gap: '1rem',
                         }}
                     >
-                        <Image
-                            src={user.imageUrl}
-                            alt="user avatar"
-                            width={50}
-                            height={50}
-                        />
-                        <Typography
-                            variant="body1"
-                            component="p"
-                            className="text-m text-black"
+                        <Box
+                            sx={{
+                                borderRadius: '50%',
+                                overflow: 'hidden',
+                                mb: 1.5,
+                            }}
                         >
+                            <Image
+                                src={user.imageUrl}
+                                alt="user avatar"
+                                width={40}
+                                height={40}
+                            />
+                        </Box>
+                        <Typography variant="body1" component="p">
                             {user.firstName} {user.lastName}
                         </Typography>
                     </Box>
-                    <Typography
-                        variant="body1"
-                        component="p"
-                        className="text-lg"
-                    >
+                    <Typography variant="body1" component="p">
                         {description}
                     </Typography>
                     <Box
@@ -79,7 +79,7 @@ export default async function PlanItem({
                 </CardContent>
                 <CardActions className="flex justify-end">
                     <Link href={`/plans/${id}`} passHref>
-                        <Button variant="outlined" color="primary">
+                        <Button variant="contained" color="primary">
                             Details
                         </Button>
                     </Link>
