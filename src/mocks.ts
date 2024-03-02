@@ -5,7 +5,7 @@ export const plans = [
         author: 'superpowerlifter123',
         description: 'Wonderful plan for begginers 1',
         tags: ['strength', 'intermediate'],
-        excercises: {
+        exercises: {
             0: [
                 {
                     name: 'Bench press',
@@ -31,7 +31,7 @@ export const plans = [
         title: 'Awesome plan 2',
         description: 'Wonderful plan for begginers 2',
         tags: ['mobility', 'crossfit'],
-        excercises: {
+        exercises: {
             0: [
                 {
                     name: 'Incline Bench press',

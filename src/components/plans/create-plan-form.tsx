@@ -15,7 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { ExerciseDTO, CreateExerciseDTO } from '@/app/common/model';
+import { ExerciseDTO } from '@/app/common/model';
 import { useUser } from '@clerk/nextjs';
 import { Add, Remove } from '@mui/icons-material';
 import Card from '@mui/material/Card';
@@ -25,7 +25,6 @@ import PageHeader from '../shared/page-header/page-header';
 import { createPlan } from '@/utils/plans';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
-import { createExercises, appendExercisesToPlan } from '@/utils/exercises';
 import { v1 as uuidv1 } from 'uuid';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
@@ -40,7 +39,7 @@ type FormValues = {
     exercises: ExerciseDTO[];
 };
 
-export const defaultExerciseValues = {
+const defaultExerciseValues = {
     name: '',
     description: '',
     isOwnBodyWeight: false,
@@ -49,11 +48,19 @@ export const defaultExerciseValues = {
     weight: 0,
 };
 
+const defaultSnackbarState = {
+    isOpen: false,
+    message: '',
+};
+
 export default function CreatePlanForm() {
     const [isLoading, setIsLoading] = useState(false);
-    const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+    const [snackbarState, setSnackbarState] = useState(defaultSnackbarState);
 
-    const handleSnackbarOpen = () => setIsSnackbarOpen((prev) => !prev);
+    const handleSnackbarOpen = (message: string) => setSnackbarState((prev) => ({
+        isOpen: !prev.isOpen,
+        message,
+    }));
 
     const { user } = useUser();
     const {
@@ -73,7 +80,6 @@ export default function CreatePlanForm() {
             exercises: [
                 {
                     name: '',
-                    planId: '',
                     description: '',
                     isOwnBodyWeight: false,
                     reps: 0,
@@ -92,17 +98,16 @@ export default function CreatePlanForm() {
                 ...data,
                 id,
                 userId: user?.id!,
-                exerciseIds: [],
+                exercises: data.exercises,
             });
-            const exercisesIds = await createExercises(data.exercises, id);
-            await appendExercisesToPlan(exercisesIds, id);
+            handleSnackbarOpen('Plan successfully created.');
             reset();
             Router.reload();
         } catch (e: any) {
+            handleSnackbarOpen('Plan creation failed.');
             console.log('Error occurred.', e.message);
         } finally {
             setIsLoading(false);
-            handleSnackbarOpen();
         }
     };
 
@@ -114,10 +119,10 @@ export default function CreatePlanForm() {
     return (
         <>
             <Snackbar
-                open={isSnackbarOpen}
+                open={snackbarState.isOpen}
                 autoHideDuration={3000}
-                onClose={() => setIsSnackbarOpen(false)}
-                message="Plan successfully created"
+                onClose={() => setSnackbarState(defaultSnackbarState)}
+                message={snackbarState.message}
             />
             <PageHeader title="Create plan">
                 <Link href="/plans" passHref>
@@ -203,7 +208,10 @@ export default function CreatePlanForm() {
                             Exercises
                         </Typography>
                         <Button
-                            onClick={() => append({ ...defaultExerciseValues })}
+                            onClick={() => append(
+                                //@ts-ignore
+                                defaultExerciseValues,
+                            )}
                             variant="contained"
                             startIcon={<Add />}
                         >
@@ -228,8 +236,9 @@ export default function CreatePlanForm() {
                     {fields.length ? (
                         fields.map((item, index) => {
                             const isExerciseOnOwnBodyWeight = watch(
-                                `exercises.${index}.isOwnBodyWeight`
+                                `exercises.${index}.isOwnBodyWeight`,
                             )!;
+                            // @ts-ignore
                             return (
                                 <li key={item.id}>
                                     <Card
@@ -249,12 +258,12 @@ export default function CreatePlanForm() {
                                                 required: true,
                                             }}
                                             render={({
-                                                field: {
-                                                    onChange,
-                                                    onBlur,
-                                                    value,
-                                                },
-                                            }) => (
+                                                         field: {
+                                                             onChange,
+                                                             onBlur,
+                                                             value,
+                                                         },
+                                                     }) => (
                                                 <>
                                                     <InputLabel>
                                                         Title
@@ -267,7 +276,8 @@ export default function CreatePlanForm() {
                                                         error={
                                                             errors.exercises &&
                                                             Object.values(
-                                                                errors.exercises
+                                                                errors.exercises,
+                                                                //@ts-ignore
                                                             )[index]?.title
                                                         }
                                                     />
@@ -292,12 +302,12 @@ export default function CreatePlanForm() {
                                                 required: true,
                                             }}
                                             render={({
-                                                field: {
-                                                    onChange,
-                                                    onBlur,
-                                                    value,
-                                                },
-                                            }) => (
+                                                         field: {
+                                                             onChange,
+                                                             onBlur,
+                                                             value,
+                                                         },
+                                                     }) => (
                                                 <>
                                                     <InputLabel>
                                                         Description
@@ -309,10 +319,8 @@ export default function CreatePlanForm() {
                                                         value={value}
                                                         error={
                                                             errors.exercises &&
-                                                            Object.values(
-                                                                errors.exercises
-                                                            )[index]
-                                                                ?.description
+                                                            //@ts-ignore
+                                                            Object.values(errors.exercises)[index]?.description
                                                         }
                                                     />
                                                     <ErrorMessage
@@ -335,12 +343,12 @@ export default function CreatePlanForm() {
                                                 required: true,
                                             }}
                                             render={({
-                                                field: {
-                                                    onChange,
-                                                    onBlur,
-                                                    value,
-                                                },
-                                            }) => (
+                                                         field: {
+                                                             onChange,
+                                                             onBlur,
+                                                             value,
+                                                         },
+                                                     }) => (
                                                 <>
                                                     <InputLabel>
                                                         Reps
@@ -362,12 +370,12 @@ export default function CreatePlanForm() {
                                                 required: true,
                                             }}
                                             render={({
-                                                field: {
-                                                    onChange,
-                                                    onBlur,
-                                                    value,
-                                                },
-                                            }) => (
+                                                         field: {
+                                                             onChange,
+                                                             onBlur,
+                                                             value,
+                                                         },
+                                                     }) => (
                                                 <>
                                                     <InputLabel>
                                                         Series
@@ -386,8 +394,8 @@ export default function CreatePlanForm() {
                                             control={control}
                                             name={`exercises.${index}.isOwnBodyWeight`}
                                             render={({
-                                                field: { onChange, value },
-                                            }) => (
+                                                         field: { onChange, value },
+                                                     }) => (
                                                 <FormControlLabel
                                                     control={
                                                         <Switch
@@ -407,12 +415,12 @@ export default function CreatePlanForm() {
                                                     !isExerciseOnOwnBodyWeight,
                                             }}
                                             render={({
-                                                field: {
-                                                    onChange,
-                                                    onBlur,
-                                                    value,
-                                                },
-                                            }) => (
+                                                         field: {
+                                                             onChange,
+                                                             onBlur,
+                                                             value,
+                                                         },
+                                                     }) => (
                                                 <>
                                                     <InputLabel>
                                                         Weight
@@ -437,9 +445,8 @@ export default function CreatePlanForm() {
                                                 <IconButton
                                                     aria-label="Add exercise"
                                                     onClick={() => {
-                                                        append({
-                                                            ...defaultExerciseValues,
-                                                        });
+                                                        //@ts-ignore
+                                                        append(defaultExerciseValues);
                                                     }}
                                                 >
                                                     <Add />

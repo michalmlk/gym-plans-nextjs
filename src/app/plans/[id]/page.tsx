@@ -7,7 +7,7 @@ import Link from 'next/link';
 import IconButton from '@mui/material/IconButton';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 
-export default function PlanPage({ params }) {
+export default function PlanPage({ params }: any) {
     const { id } = params;
 
     return (

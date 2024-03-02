@@ -22,7 +22,7 @@ export const getPlan = async (planId: string): Promise<PlanDTO> => {
 export const createPlan = async (
     data: Pick<
         PlanDTO,
-        'title' | 'description' | 'tags' | 'userId' | 'exerciseIds' | 'id'
+        'title' | 'description' | 'tags' | 'userId' | 'id' | 'exercises'
     >
 ): Promise<void> => {
     try {
@@ -36,7 +36,7 @@ export const createPlan = async (
                 description: data.description,
                 tags: [],
                 userId: data.userId,
-                exerciseIds: [],
+                exercises: data.exercises,
             }
         );
     } catch (e: any) {

@@ -7,10 +7,10 @@ export type PlanDTO = {
     tags: string[];
     userId: string;
     exerciseIds: string[];
+    exercises: ExerciseDTO[];
 } & sdk.Models.Document;
 
 export type ExerciseDTO = {
-    planId: string;
     name: string;
     description: string;
     isOwnBodyWeight: boolean;
@@ -18,14 +18,3 @@ export type ExerciseDTO = {
     series: number;
     weight?: number;
 } & sdk.Models.Document;
-
-export type CreateExerciseDTO = Pick<
-    ExerciseDTO,
-    | 'planId'
-    | 'name'
-    | 'description'
-    | 'isOwnBodyWeight'
-    | 'reps'
-    | 'series'
-    | 'weight'
->;
