@@ -12,14 +12,13 @@ import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import classNames from 'classnames';
 import styles from './top-bar.module.css';
 import { UserButton } from '@clerk/nextjs';
 
 const pages = [
     {
-        label: 'Community',
-        href: '/community',
+        label: 'My plans',
+        href: '/my-plans',
     },
     {
         label: 'Browse',

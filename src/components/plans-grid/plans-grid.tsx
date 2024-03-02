@@ -1,11 +1,14 @@
 import React from 'react';
-import PlanItem from './plan-item';
+import PlanItem from '../plan-item/plan-item';
 import Box from '@mui/material/Box';
 import { PlanDTO } from '@/app/common/model';
-import { getPlans } from '@/utils/plans';
 
-export default async function PlansGrid(): Promise<React.ReactElement> {
-    const plans: PlanDTO[] = await getPlans();
+type PlansGridProps = {
+    plans: PlanDTO[];
+    isManageMode?: boolean;
+}
+
+export default async function PlansGrid({ plans, isManageMode = false }: PlansGridProps): Promise<React.ReactElement> {
     return (
         <Box
             component="div"
@@ -29,6 +32,7 @@ export default async function PlansGrid(): Promise<React.ReactElement> {
                         id={$id}
                         tags={tags}
                         userId={userId}
+                        isManageMode={isManageMode}
                     />
                 ))}
         </Box>

@@ -9,8 +9,8 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 
-export default function ExerciseItem(props: ExerciseDTO) {
-    const { name, description, reps, series, weight, isOwnBodyWeight } = props;
+export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boolean }) {
+    const { name, description, reps, series, weight, isOwnBodyWeight, isManageMode } = props;
     const [isDone, setIsDone] = useState(false);
 
     const handleToggleStatus = () => setIsDone((prev) => !prev);
@@ -35,13 +35,34 @@ export default function ExerciseItem(props: ExerciseDTO) {
                     >
                         {name}
                     </Typography>
-                    <Button
-                        size="small"
-                        variant="outlined"
-                        onClick={handleToggleStatus}
-                    >
-                        Done
-                    </Button>
+                    {!isManageMode ?
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={handleToggleStatus}
+                        >
+                            Done
+                        </Button> : <Box sx={{
+                            display: 'flex',
+                            gap: 1.5,
+                        }
+                        }>
+                            <Button
+                                size="small"
+                                variant="outlined"
+                                onClick={handleToggleStatus}
+                            >
+                                Edit
+                            </Button>
+                            <Button
+                                size="small"
+                                variant="outlined"
+                                onClick={handleToggleStatus}
+                                color="error"
+                            >
+                                Delete
+                            </Button>
+                        </Box>}
                 </Box>
 
                 <Divider />

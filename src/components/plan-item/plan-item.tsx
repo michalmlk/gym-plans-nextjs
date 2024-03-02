@@ -17,15 +17,17 @@ export type PlanItemProps = {
     id: string;
     author: string;
     userId: string;
+    isManageMode?: boolean;
 };
 
 export default async function PlanItem({
-    title,
-    description,
-    id,
-    tags,
-    userId,
-}: PlanItemProps) {
+                                           title,
+                                           description,
+                                           id,
+                                           tags,
+                                           userId,
+                                           isManageMode,
+                                       }: PlanItemProps) {
     const user = await clerkClient.users.getUser(userId);
     return (
         <Box
@@ -77,12 +79,19 @@ export default async function PlanItem({
                         ))}
                     </Box>
                 </CardContent>
-                <CardActions className="flex justify-end">
-                    <Link href={`/plans/${id}`} passHref>
-                        <Button variant="contained" color="primary">
+                <CardActions className="flex justify-end gap-4">
+                    {isManageMode ?
+                        <Link href={`/plans/${id}/manage`} passHref>
+                            <Button variant="outlined" color="primary">
+                                Manage
+                            </Button>
+                        </Link>
+
+                     : <Link href={`/plans/${id}`} passHref>
+                        <Button variant="outlined" color="primary">
                             Details
                         </Button>
-                    </Link>
+                    </Link>}
                 </CardActions>
             </Card>
         </Box>
