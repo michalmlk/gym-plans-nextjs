@@ -28,7 +28,7 @@ import Snackbar from '@mui/material/Snackbar';
 import { v1 as uuidv1 } from 'uuid';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 type FormValues = {
     $id: string;
@@ -102,7 +102,7 @@ export default function CreatePlanForm() {
             });
             handleSnackbarOpen('Plan successfully created.');
             reset();
-            Router.reload();
+            router.refresh();
         } catch (e: any) {
             handleSnackbarOpen('Plan creation failed.');
             console.log('Error occurred.', e.message);
@@ -115,6 +115,7 @@ export default function CreatePlanForm() {
         name: 'exercises',
         control,
     });
+    const router = useRouter();
 
     return (
         <>
