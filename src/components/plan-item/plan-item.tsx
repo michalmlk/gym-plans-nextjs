@@ -87,11 +87,11 @@ export default async function PlanItem({
                             </Button>
                         </Link>
 
-                     : <Link href={`/plans/${id}`} passHref>
-                        <Button variant="outlined" color="primary">
-                            Details
-                        </Button>
-                    </Link>}
+                        : <Link href={`/plans/${id}`} passHref>
+                            <Button variant="outlined" color="primary">
+                                Details
+                            </Button>
+                        </Link>}
                 </CardActions>
             </Card>
         </Box>

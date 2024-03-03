@@ -2,6 +2,7 @@ import React from 'react';
 import PlanItem from '../plan-item/plan-item';
 import Box from '@mui/material/Box';
 import { PlanDTO } from '@/app/common/model';
+import Typography from '@mui/material/Typography';
 
 type PlansGridProps = {
     plans: PlanDTO[];
@@ -22,7 +23,7 @@ export default async function PlansGrid({ plans, isManageMode = false }: PlansGr
                 },
             }}
         >
-            {plans.length &&
+            {plans.length ?
                 plans.map(({ title, description, tags, userId, $id }) => (
                     <PlanItem
                         key={$id}
@@ -34,7 +35,7 @@ export default async function PlansGrid({ plans, isManageMode = false }: PlansGr
                         userId={userId}
                         isManageMode={isManageMode}
                     />
-                ))}
+                )) : <Typography variant="h4" component="h4">No plans</Typography> }
         </Box>
     );
 }
