@@ -10,6 +10,14 @@ export const getExercises = async (): Promise<ExerciseDTO[]> => {
     return documents;
 };
 
+export const deleteExercise = async (id: string): Promise<void> => {
+    try {
+        await appwriteDatabase.deleteDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!, 'exercises', id);
+    } catch (e) {
+        throw new Error('Error occurred. ', e.message);
+    }
+};
+
 export const getExercisesFromPlan = async (
     planId: string,
 ): Promise<ExerciseDTO[] | undefined> => {

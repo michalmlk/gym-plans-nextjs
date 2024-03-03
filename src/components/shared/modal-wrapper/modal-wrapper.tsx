@@ -1,15 +1,15 @@
 'use client';
 
-import React, { PropsWithChildren, ReactElement, useState } from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Modal } from '@mui/material';
 
 type ModalWrapperProps = {
     title: string;
-    width: number;
-    onClose?: () => void;
     isOpen: boolean;
+    onClose: () => void;
+    width?: number;
 }
 export const ModalWrapper: React.FC<PropsWithChildren<ModalWrapperProps>> = ({
                                                                                  isOpen,

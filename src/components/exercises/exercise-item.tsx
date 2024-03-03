@@ -11,10 +11,10 @@ import Button from '@mui/material/Button';
 import useModal from '@/hooks/useModal';
 import ModalWrapper from '@/components/shared/modal-wrapper/modal-wrapper';
 import CardActions from '@mui/material/CardActions';
-import Link from 'next/link';
+import { deleteExercise } from '@/utils/exercises';
 
 export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boolean }) {
-    const { name, description, reps, series, weight, isOwnBodyWeight, isManageMode } = props;
+    const { name, description, reps, series, weight, isOwnBodyWeight, isManageMode, $id } = props;
     const [isDone, setIsDone] = useState(false);
 
     const {
@@ -23,9 +23,21 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
         handleModalOpen,
     } = useModal(false);
     const handleToggleStatus = () => setIsDone((prev) => !prev);
+
+    // const handleDeleteExercise = async () => {
+    //     try {
+    //         await deleteExercise($id);
+    //         handleModalClose();
+    //     } catch (error) {
+    //         throw new Error(error.message);
+    //     }
+    //
+    // };
+
     return (
         <>
-            <ModalWrapper title={`Are you sure you want to remove exercise: ${name} ?`} isOpen={isModalOpen}>
+            <ModalWrapper title={`Are you sure you want to remove exercise: ${name} ?`} isOpen={isModalOpen}
+                          onClose={handleModalClose}>
                 <CardActions className="flex justify-between">
                     <Button
                         variant="outlined"
@@ -37,6 +49,7 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
                     <Button
                         variant="contained"
                         color="error"
+                        onClick={() => console.log('err')}
                     >
                         Delete
                     </Button>
