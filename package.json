@@ -18,6 +18,8 @@
     "@hookform/error-message": "^2.0.1",
     "@mui/icons-material": "^5.15.10",
     "@mui/material-nextjs": "^5.15.9",
+    "@tanstack/react-query": "^5.24.8",
+    "@tanstack/react-query-devtools": "^5.24.8",
     "appwrite": "^13.0.1",
     "classnames": "^2.5.1",
     "inversify": "^6.0.2",

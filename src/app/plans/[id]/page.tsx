@@ -19,9 +19,7 @@ export default function PlanPage({ params }: any) {
                     </IconButton>
                 </Link>
             </PageHeader>
-            <Suspense fallback={<LinearProgress />}>
-                <ExercisesGrid id={id} />
-            </Suspense>
+            <ExercisesGrid id={id} />
         </Container>
     );
 }
