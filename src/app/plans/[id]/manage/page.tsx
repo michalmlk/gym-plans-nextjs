@@ -3,9 +3,7 @@ import { Suspense } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 import ExercisesGrid from '@/components/exercises/exercises-grid';
 import PageHeader from '@/components/shared/page-header/page-header';
-import Link from 'next/link';
-import IconButton from '@mui/material/IconButton';
-import ArrowBack from '@mui/icons-material/ArrowBack';
+import ManagePlanButtons from '@/app/plans/[id]/manage/components/manage-plan-buttons';
 
 export default function ManagePlanPage({ params }: any) {
     const { id } = params;
@@ -13,11 +11,7 @@ export default function ManagePlanPage({ params }: any) {
     return (
         <Container className="p-24">
             <PageHeader title="Manage plan">
-                <Link href="/my-plans" passHref>
-                    <IconButton>
-                        <ArrowBack />
-                    </IconButton>
-                </Link>
+                <ManagePlanButtons id={id} />
             </PageHeader>
             <Suspense fallback={<LinearProgress />}>
                 <ExercisesGrid id={id} isManageMode />
