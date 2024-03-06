@@ -5,11 +5,12 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Modal } from '@mui/material';
 
-type ModalWrapperProps = {
-    title: string;
+export type ModalWrapperProps = {
     isOpen: boolean;
     onClose: () => void;
+    title?: string;
     width?: number;
+    customStyles?: React.CSSProperties;
 }
 export const ModalWrapper: React.FC<PropsWithChildren<ModalWrapperProps>> = ({
                                                                                  isOpen,
@@ -17,6 +18,7 @@ export const ModalWrapper: React.FC<PropsWithChildren<ModalWrapperProps>> = ({
                                                                                  title,
                                                                                  width = 400,
                                                                                  children,
+                                                                                 customStyles,
                                                                              }): ReactElement => {
 
     const style = {
@@ -28,6 +30,7 @@ export const ModalWrapper: React.FC<PropsWithChildren<ModalWrapperProps>> = ({
         bgcolor: 'background.paper',
         boxShadow: 24,
         p: 2,
+        ...customStyles,
     };
 
     return (
@@ -38,9 +41,9 @@ export const ModalWrapper: React.FC<PropsWithChildren<ModalWrapperProps>> = ({
             aria-describedby="modal-modal-description"
         >
             <Card sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
+                {title && <Typography id="modal-modal-title" variant="h6" component="h2">
                     {title}
-                </Typography>
+                </Typography>}
                 {children}
             </Card>
         </Modal>

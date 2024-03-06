@@ -9,29 +9,36 @@ import useModal from '@/hooks/useModal';
 import Box from '@mui/material/Box';
 import { Tooltip } from '@mui/material';
 import ConfirmationModal from '@/components/confirmation-modal/confirmation-modal';
+import CreateExerciseModal from '@/app/plans/[id]/manage/components/create-exercise-modal';
 
 type ManagePlanButtonsProps = {
     id: string;
 }
-export default function ManagePlanButtons({ id: string }): ManagePlanButtonsProps {
+export default function ManagePlanButtons({ id }: ManagePlanButtonsProps) {
 
-    const handleDeletePlan = async (id: string): Promise<void> => {
+    const handleDeletePlan = async (): Promise<void> => {
         console.log('delete');
     };
+
     const {
         isOpen: isDeleteModalOpen,
         handleModalClose: handleDeleteModalClose,
         handleModalOpen: handleDeleteModalOpen,
     } = useModal(false);
-
+    const {
+        isOpen: isCreateModalOpen,
+        handleModalClose: handleCreateModalClose,
+        handleModalOpen: handleCreateModalOpen,
+    } = useModal(false);
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2 }}>
             {isDeleteModalOpen && <ConfirmationModal isOpen={isDeleteModalOpen} onConfirm={handleDeletePlan}
                                                      onClose={handleDeleteModalClose} confirmButtonColor="error"
                                                      title="Are you sure you want to delete this plan?" />}
+            {isCreateModalOpen && <CreateExerciseModal isOpen={isCreateModalOpen} onClose={handleCreateModalClose} />}
             <Tooltip title="Add exercise">
-                <IconButton>
+                <IconButton onClick={handleCreateModalOpen}>
                     <Add />
                 </IconButton>
             </Tooltip>

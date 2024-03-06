@@ -5,7 +5,7 @@ import ExercisesGrid from '@/components/exercises/exercises-grid';
 import PageHeader from '@/components/shared/page-header/page-header';
 import ManagePlanButtons from '@/app/plans/[id]/manage/components/manage-plan-buttons';
 
-export default function ManagePlanPage({ params }: any) {
+export default function ManagePlanPage({ params }: { params: { id: string } }) {
     const { id } = params;
 
     return (

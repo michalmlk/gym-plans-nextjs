@@ -7,8 +7,8 @@ type ConfirmationModalProps = {
     title: string;
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: () => void;
-    confirmButtonColor: ButtonOwnProps.color;
+    onConfirm: any;
+    confirmButtonColor: ButtonOwnProps['color'];
     confirmLabel?: string;
     cancelLabel?: string;
 }
