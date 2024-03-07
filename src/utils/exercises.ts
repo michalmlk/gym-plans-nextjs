@@ -1,6 +1,7 @@
 import { ExerciseDTO } from '@/app/common/model';
 import { getPlan } from './plans';
 import { appwriteDatabase } from './appwrite';
+import { ID } from 'appwrite';
 
 export const getExercises = async (): Promise<ExerciseDTO[]> => {
     const { documents } = await appwriteDatabase.listDocuments<ExerciseDTO>(
@@ -24,6 +25,18 @@ export const getExercisesFromPlan = async (
     try {
         const currentPlan = await getPlan(planId);
         return currentPlan.exercises || [];
+    } catch (e: any) {
+        throw new Error(e.message);
+    }
+};
+
+export const appendExerciseToPlan = async (planId: string, data: Pick<ExerciseDTO, 'name' | 'description' | 'isOwnBodyWeight' | 'reps' | 'series' | 'weight'>): Promise<void> => {
+    try {
+        const newExercise = await appwriteDatabase.createDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!, 'exercises', ID.unique(), data);
+        const currentPlan = await getPlan(planId);
+        await appwriteDatabase.updateDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!, 'plans', planId, {
+            exercises: [...currentPlan.exercises, newExercise],
+        });
     } catch (e: any) {
         throw new Error(e.message);
     }

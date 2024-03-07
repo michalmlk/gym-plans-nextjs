@@ -10,14 +10,25 @@ import Box from '@mui/material/Box';
 import { Tooltip } from '@mui/material';
 import ConfirmationModal from '@/components/confirmation-modal/confirmation-modal';
 import CreateExerciseModal from '@/app/plans/[id]/manage/components/create-exercise-modal';
+import { deletePlan } from '@/utils/plans';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 type ManagePlanButtonsProps = {
     id: string;
 }
 export default function ManagePlanButtons({ id }: ManagePlanButtonsProps) {
 
+    const queryClient = useQueryClient();
+    const router = useRouter();
     const handleDeletePlan = async (): Promise<void> => {
-        console.log('delete');
+        try {
+            await deletePlan(id);
+            await queryClient.invalidateQueries({ queryKey: ['plans'] });
+        } catch (e: any) {
+            console.error(e);
+            throw new Error(e.message);
+        }
     };
 
     const {
@@ -36,7 +47,8 @@ export default function ManagePlanButtons({ id }: ManagePlanButtonsProps) {
             {isDeleteModalOpen && <ConfirmationModal isOpen={isDeleteModalOpen} onConfirm={handleDeletePlan}
                                                      onClose={handleDeleteModalClose} confirmButtonColor="error"
                                                      title="Are you sure you want to delete this plan?" />}
-            {isCreateModalOpen && <CreateExerciseModal isOpen={isCreateModalOpen} onClose={handleCreateModalClose} />}
+            {isCreateModalOpen &&
+                <CreateExerciseModal isOpen={isCreateModalOpen} onClose={handleCreateModalClose} id={id} />}
             <Tooltip title="Add exercise">
                 <IconButton onClick={handleCreateModalOpen}>
                     <Add />

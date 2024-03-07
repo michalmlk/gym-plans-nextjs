@@ -6,6 +6,7 @@ import React, { Suspense } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 import PlansGrid from '@/components/plans-grid/plans-grid';
 import { getPlansForLoggedUser } from '@/utils/plans';
+import { useQuery } from '@tanstack/react-query';
 
 export default async function MyPlansPage() {
     const plans = await getPlansForLoggedUser();

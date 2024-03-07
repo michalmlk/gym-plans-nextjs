@@ -12,15 +12,13 @@ import useModal from '@/hooks/useModal';
 import ModalWrapper from '@/components/shared/modal-wrapper/modal-wrapper';
 import CardActions from '@mui/material/CardActions';
 import { deleteExercise } from '@/utils/exercises';
-import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boolean }) {
     const { name, description, reps, series, weight, isOwnBodyWeight, isManageMode, $id } = props;
     const [isDone, setIsDone] = useState(false);
-    const router = useRouter();
-
     const queryClient = useQueryClient();
+
     const {
         isOpen: isModalOpen,
         handleModalClose,

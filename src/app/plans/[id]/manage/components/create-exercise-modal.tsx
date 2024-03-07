@@ -10,6 +10,10 @@ import Box from '@mui/material/Box';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Add } from '@mui/icons-material';
+import { appendExerciseToPlan } from '@/utils/exercises';
+import { useQueryClient } from '@tanstack/react-query';
 
 type FormValues = {
     name: string,
@@ -26,7 +30,7 @@ const inputStyle = {
     width: '100%',
 };
 
-function CreateExerciseForm({ onClose }: { onClose: () => void }) {
+function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }) {
 
     const defaultExerciseValues = {
         name: '',
@@ -43,7 +47,7 @@ function CreateExerciseForm({ onClose }: { onClose: () => void }) {
         handleSubmit,
         watch,
         reset,
-        formState: { errors, isValid },
+        formState: { errors, isValid, isLoading },
     } = useForm<FormValues>({
         reValidateMode: 'onChange',
         mode: 'onChange',
@@ -54,9 +58,23 @@ function CreateExerciseForm({ onClose }: { onClose: () => void }) {
         `isOwnBodyWeight`,
     )!;
 
+    const queryClient = useQueryClient();
+
+    const onSubmit = async (values: FormValues): Promise<void> => {
+        try {
+            await appendExerciseToPlan(id, values);
+            reset();
+            onClose();
+            await queryClient.invalidateQueries({ queryKey: ['exercises'] });
+        } catch (e: any) {
+            throw new Error(e.message);
+        }
+    };
+
 
     return (
-        <Box component="form" sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box component="form" sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}
+             onSubmit={handleSubmit(onSubmit)}>
             <Controller
                 control={control}
                 name="name"
@@ -243,14 +261,28 @@ function CreateExerciseForm({ onClose }: { onClose: () => void }) {
             />
             <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Button variant="outlined" color="primary" onClick={onClose}>Cancel</Button>
-                <Button color="primary" variant="contained" onClick={() => console.log('x')}>Add</Button>
+                <Button
+                    color="primary"
+                    variant="contained"
+                    type="submit"
+                    disabled={!isValid}
+                    startIcon={
+                        isLoading ? (
+                            <CircularProgress size={20} color="info" />
+                        ) : (
+                            <Add />
+                        )
+                    }
+                >
+                    Create
+                </Button>
             </CardActions>
         </Box>
     );
 }
 
-export default function CreateExerciseModal({ onClose, isOpen }: ModalWrapperProps) {
+export default function CreateExerciseModal({ onClose, isOpen, id }: ModalWrapperProps & { id: string }) {
     return <ModalWrapper onClose={onClose} isOpen={isOpen} title="Add new exercise"
-                         customStyles={customStyles}><CreateExerciseForm onClose={onClose} /></ModalWrapper>;
+                         customStyles={customStyles}><CreateExerciseForm onClose={onClose} id={id} /></ModalWrapper>;
 }
         
