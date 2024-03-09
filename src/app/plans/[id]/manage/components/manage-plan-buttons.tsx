@@ -13,6 +13,7 @@ import CreateExerciseModal from '@/app/plans/[id]/manage/components/create-exerc
 import { deletePlan } from '@/utils/plans';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { informAboutProtectedRouteInfo } from '@clerk/nextjs/dist/types/server/errors';
 
 type ManagePlanButtonsProps = {
     id: string;
@@ -25,6 +26,9 @@ export default function ManagePlanButtons({ id }: ManagePlanButtonsProps) {
         try {
             await deletePlan(id);
             await queryClient.invalidateQueries({ queryKey: ['plans'] });
+            handleDeleteModalClose();
+            router.push('/my-plans');
+
         } catch (e: any) {
             console.error(e);
             throw new Error(e.message);

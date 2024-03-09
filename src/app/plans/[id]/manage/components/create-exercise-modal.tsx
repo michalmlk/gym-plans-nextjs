@@ -47,6 +47,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
         handleSubmit,
         watch,
         reset,
+        setValue,
         formState: { errors, isValid, isLoading },
     } = useForm<FormValues>({
         reValidateMode: 'onChange',
@@ -79,7 +80,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                 control={control}
                 name="name"
                 rules={{
-                    required: true,
+                    required: 'Exercise name is required.',
                 }}
                 render={({
                              field: {
@@ -103,11 +104,9 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                         <ErrorMessage
                             errors={errors}
                             name="name"
-                            render={() => (
+                            render={({ message }) => (
                                 <p className="text-red-500">
-                                    Title for the
-                                    exercise is
-                                    required
+                                    {message}
                                 </p>
                             )}
                         />
@@ -118,7 +117,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                 control={control}
                 name="description"
                 rules={{
-                    required: true,
+                    required: 'Description is required.',
                 }}
                 render={({
                              field: {
@@ -144,10 +143,9 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                         <ErrorMessage
                             errors={errors}
                             name="description"
-                            render={() => (
+                            render={({ message }) => (
                                 <p className="text-red-500">
-                                    Description is
-                                    required
+                                    {message}
                                 </p>
                             )}
                         />
@@ -158,7 +156,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                 control={control}
                 name="reps"
                 rules={{
-                    required: true,
+                    required: 'Field is required',
                 }}
                 render={({
                              field: {
@@ -179,6 +177,15 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                             type="number"
                             style={inputStyle}
                         />
+                        <ErrorMessage
+                            errors={errors}
+                            name="reps"
+                            render={({ message }) => (
+                                <p className="text-red-500">
+                                    {message}
+                                </p>
+                            )}
+                        />
                     </div>
                 )}
             />
@@ -186,7 +193,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                 control={control}
                 name="series"
                 rules={{
-                    required: true,
+                    required: 'Field is required',
                 }}
                 render={({
                              field: {
@@ -200,12 +207,21 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                             Series
                         </InputLabel>
                         <OutlinedInput
-                            placeholder="Title"
+                            placeholder="Series"
                             onBlur={onBlur}
                             onChange={onChange}
                             value={value}
                             type="number"
                             style={inputStyle}
+                        />
+                        <ErrorMessage
+                            errors={errors}
+                            name="series"
+                            render={({ message }) => (
+                                <p className="text-red-500">
+                                    {message}
+                                </p>
+                            )}
                         />
                     </div>
                 )}
@@ -219,7 +235,10 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                     <FormControlLabel
                         control={
                             <Switch
-                                onChange={onChange}
+                                onChange={(e) => {
+                                    setValue('weight', defaultExerciseValues.weight);
+                                    onChange(e);
+                                }}
                                 value={value}
                             />
                         }
@@ -232,7 +251,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                 name="weight"
                 rules={{
                     required:
-                        !isExerciseOnOwnBodyWeight,
+                        !isExerciseOnOwnBodyWeight ? 'Field is required.' : false,
                 }}
                 render={({
                              field: {
@@ -255,6 +274,15 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                                 isExerciseOnOwnBodyWeight!
                             }
                             style={inputStyle}
+                        />
+                        <ErrorMessage
+                            errors={errors}
+                            name="weight"
+                            render={({ message }) => (
+                                <p className="text-red-500">
+                                    {message}
+                                </p>
+                            )}
                         />
                     </div>
                 )}
