@@ -1,11 +1,15 @@
 import React from 'react';
-import PlanItem from './plan-item';
+import PlanItem from '../plan-item/plan-item';
 import Box from '@mui/material/Box';
 import { PlanDTO } from '@/app/common/model';
-import { getPlans } from '@/utils/plans';
+import Typography from '@mui/material/Typography';
 
-export default async function PlansGrid(): Promise<React.ReactElement> {
-    const plans: PlanDTO[] = await getPlans();
+type PlansGridProps = {
+    plans: PlanDTO[];
+    isManageMode?: boolean;
+}
+
+export default async function PlansGrid({ plans, isManageMode = false }: PlansGridProps): Promise<React.ReactElement> {
     return (
         <Box
             component="div"
@@ -19,7 +23,7 @@ export default async function PlansGrid(): Promise<React.ReactElement> {
                 },
             }}
         >
-            {plans.length &&
+            {plans.length ?
                 plans.map(({ title, description, tags, userId, $id }) => (
                     <PlanItem
                         key={$id}
@@ -29,8 +33,9 @@ export default async function PlansGrid(): Promise<React.ReactElement> {
                         id={$id}
                         tags={tags}
                         userId={userId}
+                        isManageMode={isManageMode}
                     />
-                ))}
+                )) : <Typography variant="h4" component="h4">No plans</Typography> }
         </Box>
     );
 }
