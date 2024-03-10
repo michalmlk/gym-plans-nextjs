@@ -52,7 +52,7 @@ export default function ManagePlanButtons({ id }: ManagePlanButtonsProps) {
                                                      onClose={handleDeleteModalClose} confirmButtonColor="error"
                                                      title="Are you sure you want to delete this plan?" />}
             {isCreateModalOpen &&
-                <ExerciseModal isOpen={isCreateModalOpen} onClose={handleCreateModalClose} id={id}
+                <ExerciseModal isOpen={isCreateModalOpen} onClose={handleCreateModalClose}
                                mode={ExerciseFormMode.CREATE} />}
             <Tooltip title="Add exercise">
                 <IconButton onClick={handleCreateModalOpen}>

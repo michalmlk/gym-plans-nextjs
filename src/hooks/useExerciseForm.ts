@@ -9,7 +9,7 @@ export enum ExerciseFormMode {
     UPDATE = 'update',
 }
 
-export const useExerciseForm = (mode: ExerciseFormMode, onClose: any, data: ExerciseDTO | null | undefined) => {
+export const useExerciseForm = (mode: ExerciseFormMode, onClose: any, data?: ExerciseDTO) => {
 
     const defaultValues = {
         name: data?.name || '',

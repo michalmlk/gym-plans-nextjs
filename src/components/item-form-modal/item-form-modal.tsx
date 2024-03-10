@@ -24,8 +24,8 @@ const inputStyle = {
 
 function ExerciseForm({ onClose, data, mode }: {
     onClose: () => void,
-    data: ExerciseDTO;
     mode: ExerciseFormMode;
+    data?: ExerciseDTO;
 }) {
 
     const {
@@ -33,7 +33,6 @@ function ExerciseForm({ onClose, data, mode }: {
         handleSubmit,
         isExerciseOnOwnBodyWeight,
         defaultValues,
-        reset,
         setValue,
         errors, isValid, isLoading,
         onSubmit,
@@ -51,6 +50,7 @@ function ExerciseForm({ onClose, data, mode }: {
                 }}
                 render={({
                              field,
+                             fieldState,
                          }) => (
                     <div>
                         <InputLabel>
@@ -62,7 +62,7 @@ function ExerciseForm({ onClose, data, mode }: {
                             onBlur={field.onBlur}
                             value={field.value}
                             onChange={field.onChange}
-                            error={errors.name!}
+                            error={!!fieldState.error}
                             style={inputStyle}
                         />
                         <ErrorMessage
@@ -85,6 +85,7 @@ function ExerciseForm({ onClose, data, mode }: {
                 }}
                 render={({
                              field,
+                             fieldState,
                          }) => (
                     <div>
                         <InputLabel>
@@ -96,9 +97,7 @@ function ExerciseForm({ onClose, data, mode }: {
                             onBlur={field.onBlur}
                             value={field.value}
                             onChange={field.onChange}
-                            error={
-                                errors.description!
-                            }
+                            error={!!fieldState.error}
                             style={inputStyle}
                         />
                         <ErrorMessage
@@ -121,6 +120,7 @@ function ExerciseForm({ onClose, data, mode }: {
                 }}
                 render={({
                              field,
+                             fieldState,
                          }) => (
                     <div>
                         <InputLabel>
@@ -132,6 +132,7 @@ function ExerciseForm({ onClose, data, mode }: {
                             onBlur={field.onBlur}
                             value={field.value}
                             onChange={field.onChange}
+                            error={!!fieldState.error}
                             type="number"
                             style={inputStyle}
                         />
@@ -155,6 +156,7 @@ function ExerciseForm({ onClose, data, mode }: {
                 }}
                 render={({
                              field,
+                             fieldState,
                          }) => (
                     <div>
                         <InputLabel>
@@ -166,6 +168,7 @@ function ExerciseForm({ onClose, data, mode }: {
                             onBlur={field.onBlur}
                             value={field.value}
                             onChange={field.onChange}
+                            error={!!fieldState.error}
                             type="number"
                             style={inputStyle}
                         />
@@ -209,7 +212,7 @@ function ExerciseForm({ onClose, data, mode }: {
                         !isExerciseOnOwnBodyWeight ? 'Field is required.' : false,
                 }}
                 render={({
-                             field,
+                             field, fieldState,
                          }) => (
                     <div>
                         <InputLabel>
@@ -224,6 +227,7 @@ function ExerciseForm({ onClose, data, mode }: {
                             disabled={
                                 isExerciseOnOwnBodyWeight!
                             }
+                            error={!!fieldState.error}
                             style={inputStyle}
                         />
                         <ErrorMessage
@@ -260,9 +264,10 @@ function ExerciseForm({ onClose, data, mode }: {
     );
 }
 
+// @ts-ignore
 export default function ExerciseModal({ onClose, isOpen, data, mode }: ModalWrapperProps & {
-    data: ExerciseDTO;
     mode: ExerciseFormMode
+    data?: ExerciseDTO;
 }) {
     return <ModalWrapper onClose={onClose} isOpen={isOpen}
                          title={mode === ExerciseFormMode.CREATE ? 'Add new exercise' : 'Edit exercise'}
