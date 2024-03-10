@@ -1,4 +1,4 @@
-import { ExerciseDTO } from '@/app/common/model';
+import { ExerciseDTO, ExerciseFormDataDTO } from '@/app/common/model';
 import { getPlan } from './plans';
 import { appwriteDatabase } from './appwrite';
 import { ID } from 'appwrite';
@@ -11,12 +11,25 @@ export const getExercises = async (): Promise<ExerciseDTO[]> => {
     return documents;
 };
 
+export const getExercise = async (exerciseId: string): Promise<ExerciseDTO | null> => {
+    return await appwriteDatabase.getDocument<ExerciseDTO>(
+        process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
+        'exercise',
+        exerciseId,
+    );
+};
+
 export const deleteExercise = async (id: string): Promise<void> => {
     try {
         await appwriteDatabase.deleteDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!, 'exercises', id);
     } catch (e) {
         throw new Error('Error occurred. ', e.message);
     }
+};
+
+export const updateExercise = async (id: string, payload: ExerciseFormDataDTO): Promise<any> => {
+    return await appwriteDatabase.updateDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
+        'exercise', id, payload);
 };
 
 export const getExercisesFromPlan = async (
@@ -30,7 +43,7 @@ export const getExercisesFromPlan = async (
     }
 };
 
-export const appendExerciseToPlan = async (planId: string, data: Pick<ExerciseDTO, 'name' | 'description' | 'isOwnBodyWeight' | 'reps' | 'series' | 'weight'>): Promise<void> => {
+export const appendExerciseToPlan = async (planId: string, data: ExerciseFormDataDTO): Promise<void> => {
     try {
         const newExercise = await appwriteDatabase.createDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!, 'exercises', ID.unique(), data);
         const currentPlan = await getPlan(planId);

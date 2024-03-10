@@ -15,6 +15,7 @@ import { deleteExercise } from '@/utils/exercises';
 import { useQueryClient } from '@tanstack/react-query';
 import { router } from 'next/client';
 import { useRouter } from 'next/navigation';
+import ConfirmationModal from '@/components/confirmation-modal/confirmation-modal';
 
 export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boolean }) {
     const { name, description, reps, series, weight, isOwnBodyWeight, isManageMode, $id } = props;
@@ -23,9 +24,15 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
     const router = useRouter();
 
     const {
-        isOpen: isModalOpen,
-        handleModalClose,
-        handleModalOpen,
+        isOpen: isDeleteModalOpen,
+        handleModalClose: handleDeleteModalClose,
+        handleModalOpen: handleDeleteModalOpen,
+    } = useModal(false);
+
+    const {
+        isOpen: isEditModalOpen,
+        handleModalClose: handleEditModalClose,
+        handleModalOpen: handleEditModalOpen,
     } = useModal(false);
     const handleToggleStatus = () => setIsDone((prev) => !prev);
 
@@ -33,7 +40,7 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
         try {
             await deleteExercise($id);
             await queryClient.invalidateQueries({ queryKey: [`exercises`] });
-            handleModalClose();
+            handleDeleteModalClose();
         } catch (error: any) {
             throw new Error(error.message);
         }
@@ -42,25 +49,9 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
 
     return (
         <>
-            <ModalWrapper title={`Are you sure you want to remove exercise: ${name} ?`} isOpen={isModalOpen}
-                          onClose={handleModalClose}>
-                <CardActions className="flex justify-between">
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={handleModalClose}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="error"
-                        onClick={handleDeleteExercise}
-                    >
-                        Delete
-                    </Button>
-                </CardActions>
-            </ModalWrapper>
+            <ConfirmationModal title={`Are you sure you want to remove exercise: ${name} ?`} isOpen={isDeleteModalOpen}
+                               onClose={handleDeleteModalClose} onConfirm={handleDeleteExercise}
+                               confirmButtonColor="error" confirmLabel="Delete" />
             <Card>
                 <CardContent>
                     <Box
@@ -80,36 +71,37 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
                         >
                             {name}
                         </Typography>
-                        {!isManageMode ?
-                            <Button
-                                size="small"
-                                variant="outlined"
-                                onClick={handleToggleStatus}
-                            >
-                                Done
-                            </Button> : <Box sx={{
-                                display: 'flex',
-                                gap: 1.5,
-                            }
-                            }>
+                        {
+                            !isManageMode ?
                                 <Button
                                     size="small"
                                     variant="outlined"
                                     onClick={handleToggleStatus}
                                 >
-                                    Edit
-                                </Button>
-                                <Button
-                                    size="small"
-                                    variant="outlined"
-                                    onClick={handleModalOpen}
-                                    color="error"
-                                >
-                                    Delete
-                                </Button>
-                            </Box>}
+                                    Done
+                                </Button> : <Box sx={{
+                                    display: 'flex',
+                                    gap: 1.5,
+                                }
+                                }>
+                                    <Button
+                                        size="small"
+                                        variant="outlined"
+                                        onClick={handleEditModalOpen}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button
+                                        size="small"
+                                        variant="outlined"
+                                        onClick={handleDeleteModalOpen}
+                                        color="error"
+                                    >
+                                        Delete
+                                    </Button>
+                                </Box>
+                        }
                     </Box>
-
                     <Divider />
                     <Typography
                         sx={{ my: 1.5, fontSize: '1.2rem' }}

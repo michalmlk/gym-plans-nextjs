@@ -1,3 +1,5 @@
+'use client';
+
 import { useUser } from '@clerk/nextjs';
 import { Controller, useForm } from 'react-hook-form';
 import InputLabel from '@mui/material/InputLabel';
@@ -24,7 +26,7 @@ const inputStyle = {
 
 function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }) {
 
-    const defaultExerciseValues = {
+    const defaultExerciseValues: ExerciseFormDataDTO = {
         name: '',
         description: '',
         isOwnBodyWeight: false,
@@ -305,4 +307,3 @@ export default function CreateExerciseModal({ onClose, isOpen, id }: ModalWrappe
     return <ModalWrapper onClose={onClose} isOpen={isOpen} title="Add new exercise"
                          customStyles={customStyles}><CreateExerciseForm onClose={onClose} id={id} /></ModalWrapper>;
 }
-        
