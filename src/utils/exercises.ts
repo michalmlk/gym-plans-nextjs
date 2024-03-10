@@ -6,15 +6,15 @@ import { ID } from 'appwrite';
 export const getExercises = async (): Promise<ExerciseDTO[]> => {
     const { documents } = await appwriteDatabase.listDocuments<ExerciseDTO>(
         process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
-        'exercise',
+        'exercises',
     );
     return documents;
 };
 
-export const getExercise = async (exerciseId: string): Promise<ExerciseDTO | null> => {
+export const getExercise = async (exerciseId: string): Promise<ExerciseDTO> => {
     return await appwriteDatabase.getDocument<ExerciseDTO>(
         process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
-        'exercise',
+        'exercises',
         exerciseId,
     );
 };
@@ -22,14 +22,14 @@ export const getExercise = async (exerciseId: string): Promise<ExerciseDTO | nul
 export const deleteExercise = async (id: string): Promise<void> => {
     try {
         await appwriteDatabase.deleteDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!, 'exercises', id);
-    } catch (e) {
+    } catch (e: any) {
         throw new Error('Error occurred. ', e.message);
     }
 };
 
 export const updateExercise = async (id: string, payload: ExerciseFormDataDTO): Promise<any> => {
     return await appwriteDatabase.updateDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
-        'exercise', id, payload);
+        'exercises', id, payload);
 };
 
 export const getExercisesFromPlan = async (

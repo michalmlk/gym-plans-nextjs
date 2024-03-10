@@ -9,19 +9,20 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import useModal from '@/hooks/useModal';
-import ModalWrapper from '@/components/shared/modal-wrapper/modal-wrapper';
-import CardActions from '@mui/material/CardActions';
 import { deleteExercise } from '@/utils/exercises';
 import { useQueryClient } from '@tanstack/react-query';
-import { router } from 'next/client';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import ConfirmationModal from '@/components/confirmation-modal/confirmation-modal';
+import ExerciseModal from '@/components/item-form-modal/item-form-modal';
+import { ExerciseFormMode } from '@/hooks/useForm';
 
 export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boolean }) {
     const { name, description, reps, series, weight, isOwnBodyWeight, isManageMode, $id } = props;
     const [isDone, setIsDone] = useState(false);
     const queryClient = useQueryClient();
     const router = useRouter();
+
+    console.log(router);
 
     const {
         isOpen: isDeleteModalOpen,
@@ -47,11 +48,14 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
 
     };
 
+
     return (
         <>
             <ConfirmationModal title={`Are you sure you want to remove exercise: ${name} ?`} isOpen={isDeleteModalOpen}
                                onClose={handleDeleteModalClose} onConfirm={handleDeleteExercise}
                                confirmButtonColor="error" confirmLabel="Delete" />
+            <ExerciseModal isOpen={isEditModalOpen} onClose={handleEditModalClose} data={props}
+                           mode={ExerciseFormMode.UPDATE} />
             <Card>
                 <CardContent>
                     <Box

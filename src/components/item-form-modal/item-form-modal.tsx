@@ -1,7 +1,6 @@
 'use client';
 
-import { useUser } from '@clerk/nextjs';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { ErrorMessage } from '@hookform/error-message';
@@ -14,9 +13,8 @@ import Button from '@mui/material/Button';
 import React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Add } from '@mui/icons-material';
-import { appendExerciseToPlan } from '@/utils/exercises';
-import { useQueryClient } from '@tanstack/react-query';
-import { ExerciseFormDataDTO } from '@/app/common/model';
+import { ExerciseFormMode, useForm } from '@/hooks/useForm';
+import { ExerciseDTO } from '@/app/common/model';
 
 const customStyles = {};
 
@@ -24,47 +22,22 @@ const inputStyle = {
     width: '100%',
 };
 
-function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }) {
+function ExerciseForm({ onClose, data, mode }: {
+    onClose: () => void,
+    data: ExerciseDTO;
+    mode: ExerciseFormMode;
+}) {
 
-    const defaultExerciseValues: ExerciseFormDataDTO = {
-        name: '',
-        description: '',
-        isOwnBodyWeight: false,
-        reps: 0,
-        series: 1,
-        weight: 0,
-    };
-
-    const { user } = useUser();
     const {
         control,
         handleSubmit,
-        watch,
+        isExerciseOnOwnBodyWeight,
+        defaultValues,
         reset,
         setValue,
-        formState: { errors, isValid, isLoading },
-    } = useForm<ExerciseFormDataDTO>({
-        reValidateMode: 'onChange',
-        mode: 'onChange',
-        defaultValues: defaultExerciseValues,
-    });
-
-    const isExerciseOnOwnBodyWeight = watch(
-        `isOwnBodyWeight`,
-    )!;
-
-    const queryClient = useQueryClient();
-
-    const onSubmit = async (values: ExerciseFormDataDTO): Promise<void> => {
-        try {
-            await appendExerciseToPlan(id, values);
-            reset();
-            onClose();
-            await queryClient.invalidateQueries({ queryKey: ['exercises'] });
-        } catch (e: any) {
-            throw new Error(e.message);
-        }
-    };
+        errors, isValid, isLoading,
+        onSubmit,
+    } = useForm(mode, onClose, data);
 
 
     return (
@@ -77,11 +50,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                     required: 'Exercise name is required.',
                 }}
                 render={({
-                             field: {
-                                 onChange,
-                                 onBlur,
-                                 value,
-                             },
+                             field,
                          }) => (
                     <div>
                         <InputLabel>
@@ -89,9 +58,10 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                         </InputLabel>
                         <OutlinedInput
                             placeholder="Title"
-                            onBlur={onBlur}
-                            onChange={onChange}
-                            value={value}
+                            name="name"
+                            onBlur={field.onBlur}
+                            value={field.value}
+                            onChange={field.onChange}
                             error={errors.name!}
                             style={inputStyle}
                         />
@@ -114,11 +84,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                     required: 'Description is required.',
                 }}
                 render={({
-                             field: {
-                                 onChange,
-                                 onBlur,
-                                 value,
-                             },
+                             field,
                          }) => (
                     <div>
                         <InputLabel>
@@ -126,9 +92,10 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                         </InputLabel>
                         <OutlinedInput
                             placeholder="Description"
-                            onBlur={onBlur}
-                            onChange={onChange}
-                            value={value}
+                            name="description"
+                            onBlur={field.onBlur}
+                            value={field.value}
+                            onChange={field.onChange}
                             error={
                                 errors.description!
                             }
@@ -153,11 +120,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                     required: 'Field is required',
                 }}
                 render={({
-                             field: {
-                                 onChange,
-                                 onBlur,
-                                 value,
-                             },
+                             field,
                          }) => (
                     <div>
                         <InputLabel>
@@ -165,9 +128,10 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                         </InputLabel>
                         <OutlinedInput
                             placeholder="Reps"
-                            onBlur={onBlur}
-                            onChange={onChange}
-                            value={value}
+                            name="reps"
+                            onBlur={field.onBlur}
+                            value={field.value}
+                            onChange={field.onChange}
                             type="number"
                             style={inputStyle}
                         />
@@ -190,11 +154,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                     required: 'Field is required',
                 }}
                 render={({
-                             field: {
-                                 onChange,
-                                 onBlur,
-                                 value,
-                             },
+                             field,
                          }) => (
                     <div>
                         <InputLabel>
@@ -202,9 +162,10 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                         </InputLabel>
                         <OutlinedInput
                             placeholder="Series"
-                            onBlur={onBlur}
-                            onChange={onChange}
-                            value={value}
+                            name="series"
+                            onBlur={field.onBlur}
+                            value={field.value}
+                            onChange={field.onChange}
                             type="number"
                             style={inputStyle}
                         />
@@ -229,11 +190,11 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                     <FormControlLabel
                         control={
                             <Switch
+                                value={defaultValues.isOwnBodyWeight || false}
                                 onChange={(e) => {
-                                    setValue('weight', defaultExerciseValues.weight);
+                                    setValue('weight', defaultValues.weight);
                                     onChange(e);
                                 }}
-                                value={value}
                             />
                         }
                         label="Own body weight"
@@ -248,11 +209,7 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                         !isExerciseOnOwnBodyWeight ? 'Field is required.' : false,
                 }}
                 render={({
-                             field: {
-                                 onChange,
-                                 onBlur,
-                                 value,
-                             },
+                             field,
                          }) => (
                     <div>
                         <InputLabel>
@@ -260,9 +217,9 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
                         </InputLabel>
                         <OutlinedInput
                             placeholder="Weight"
-                            onBlur={onBlur}
-                            onChange={onChange}
-                            value={value}
+                            onBlur={field.onBlur}
+                            value={field.value || 0}
+                            onChange={field.onChange}
                             type="number"
                             disabled={
                                 isExerciseOnOwnBodyWeight!
@@ -303,7 +260,12 @@ function CreateExerciseForm({ onClose, id }: { onClose: () => void, id: string }
     );
 }
 
-export default function CreateExerciseModal({ onClose, isOpen, id }: ModalWrapperProps & { id: string }) {
-    return <ModalWrapper onClose={onClose} isOpen={isOpen} title="Add new exercise"
-                         customStyles={customStyles}><CreateExerciseForm onClose={onClose} id={id} /></ModalWrapper>;
+export default function ExerciseModal({ onClose, isOpen, data, mode }: ModalWrapperProps & {
+    data: ExerciseDTO;
+    mode: ExerciseFormMode
+}) {
+    return <ModalWrapper onClose={onClose} isOpen={isOpen}
+                         title={mode === ExerciseFormMode.CREATE ? 'Add new exercise' : 'Edit exercise'}
+                         customStyles={customStyles}><ExerciseForm onClose={onClose} data={data}
+                                                                   mode={mode} /></ModalWrapper>;
 }
