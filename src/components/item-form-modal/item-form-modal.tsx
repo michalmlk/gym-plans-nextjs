@@ -6,15 +6,15 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { ErrorMessage } from '@hookform/error-message';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import ModalWrapper, { ModalWrapperProps } from '@/components/shared/modal-wrapper/modal-wrapper';
 import Box from '@mui/material/Box';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Add } from '@mui/icons-material';
-import { ExerciseFormMode, useForm } from '@/hooks/useForm';
+import { Add, Check } from '@mui/icons-material';
+import { ExerciseFormMode, useExerciseForm } from '@/hooks/useExerciseForm';
 import { ExerciseDTO } from '@/app/common/model';
+import { ModalWrapper, ModalWrapperProps } from '@/components/shared/modal-wrapper/modal-wrapper';
 
 const customStyles = {};
 
@@ -37,7 +37,7 @@ function ExerciseForm({ onClose, data, mode }: {
         setValue,
         errors, isValid, isLoading,
         onSubmit,
-    } = useForm(mode, onClose, data);
+    } = useExerciseForm(mode, onClose, data);
 
 
     return (
@@ -249,11 +249,11 @@ function ExerciseForm({ onClose, data, mode }: {
                         isLoading ? (
                             <CircularProgress size={20} color="info" />
                         ) : (
-                            <Add />
+                            mode === ExerciseFormMode.CREATE ? <Add /> : <Check />
                         )
                     }
                 >
-                    Create
+                    {mode === ExerciseFormMode.CREATE ? 'Create' : 'Update'}
                 </Button>
             </CardActions>
         </Box>

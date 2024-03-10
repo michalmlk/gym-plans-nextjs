@@ -11,18 +11,14 @@ import Button from '@mui/material/Button';
 import useModal from '@/hooks/useModal';
 import { deleteExercise } from '@/utils/exercises';
 import { useQueryClient } from '@tanstack/react-query';
-import { useParams, useRouter } from 'next/navigation';
 import ConfirmationModal from '@/components/confirmation-modal/confirmation-modal';
 import ExerciseModal from '@/components/item-form-modal/item-form-modal';
-import { ExerciseFormMode } from '@/hooks/useForm';
+import { ExerciseFormMode } from '@/hooks/useExerciseForm';
 
 export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boolean }) {
     const { name, description, reps, series, weight, isOwnBodyWeight, isManageMode, $id } = props;
     const [isDone, setIsDone] = useState(false);
     const queryClient = useQueryClient();
-    const router = useRouter();
-
-    console.log(router);
 
     const {
         isOpen: isDeleteModalOpen,
@@ -47,7 +43,6 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
         }
 
     };
-
 
     return (
         <>

@@ -1,12 +1,9 @@
 import Container from '@mui/material/Container';
 import PageHeader from '@/components/shared/page-header/page-header';
-import Link from 'next/link';
-import Button from '@mui/material/Button';
 import React, { Suspense } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 import PlansGrid from '@/components/plans-grid/plans-grid';
 import { getPlansForLoggedUser } from '@/utils/plans';
-import { useQuery } from '@tanstack/react-query';
 
 export default async function MyPlansPage() {
     const plans = await getPlansForLoggedUser();

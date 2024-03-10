@@ -1,8 +1,7 @@
 import { ExerciseDTO, ExerciseFormDataDTO } from '@/app/common/model';
-import { useForm as useHookForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { appendExerciseToPlan, getExercise, updateExercise } from '@/utils/exercises';
-import { useEffect, useState } from 'react';
+import { appendExerciseToPlan, updateExercise } from '@/utils/exercises';
 import { useParams } from 'next/navigation';
 
 export enum ExerciseFormMode {
@@ -10,7 +9,7 @@ export enum ExerciseFormMode {
     UPDATE = 'update',
 }
 
-export const useForm = (mode: ExerciseFormMode, onClose: any, data: ExerciseDTO | null | undefined) => {
+export const useExerciseForm = (mode: ExerciseFormMode, onClose: any, data: ExerciseDTO | null | undefined) => {
 
     const defaultValues = {
         name: data?.name || '',
@@ -28,7 +27,7 @@ export const useForm = (mode: ExerciseFormMode, onClose: any, data: ExerciseDTO 
         reset,
         setValue,
         formState: { errors, isValid, isLoading },
-    } = useHookForm<ExerciseFormDataDTO>({
+    } = useForm<ExerciseFormDataDTO>({
         defaultValues,
         reValidateMode: 'onChange',
         mode: 'onChange',

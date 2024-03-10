@@ -12,7 +12,7 @@ import ConfirmationModal from '@/components/confirmation-modal/confirmation-moda
 import { deletePlan } from '@/utils/plans';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { ExerciseFormMode } from '@/hooks/useForm';
+import { ExerciseFormMode } from '@/hooks/useExerciseForm';
 import ExerciseModal from '@/components/item-form-modal/item-form-modal';
 
 type ManagePlanButtonsProps = {
