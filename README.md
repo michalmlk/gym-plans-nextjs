@@ -18,4 +18,4 @@ Clerk Auth
 
 ## Features
 
-Currently application allows to create/edit and share gym plan between authenticated users.
+Currently application allows to create/edit and share gym plans between authenticated users.
