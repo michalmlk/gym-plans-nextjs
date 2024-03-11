@@ -36,7 +36,7 @@ export default async function Home() {
                                 width: '100%',
                             }}
                         >
-                            <Card className="h-96 flex flex-col justify-between p-6">
+                            <Card className="flex flex-col justify-between p-6">
                                 <CardHeader title="Perfect plans for everybody" />
                                 <CardContent className="h-full">
                                     <Typography
@@ -127,11 +127,26 @@ export default async function Home() {
                         sx={{
                             gap: '6rem',
                             display: 'flex',
-                            justifyContent: 'space-between',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
                             alignItems: 'center',
                             minHeight: '50vh',
                         }}
-                    ></Box>
+                    >
+                        <Typography variant="body1" color="text.secondary" className="max-w-screen-lg text-justify">Lorem ipsum dolor sit amet, consectetur
+                            adipisicing elit. Accusamus explicabo laudantium repellat vitae voluptas? Aliquid at atque
+                            impedit nesciunt numquam saepe voluptates! Accusamus illo, impedit molestiae nobis quibusdam
+                            quod saepe!</Typography>
+                        <Link href="/plans/create" passHref>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                            >
+                                Create your own plan
+                            </Button>
+                        </Link>
+                    </Box>
                 </section>
             </main>
         </Container>

@@ -61,8 +61,8 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
                         }}
                     >
                         <Typography
-                            variant="h4"
-                            component="div"
+                            variant="h5"
+                            component="h5"
                             sx={{
                                 fontStyle: isDone ? 'italic' : 'none',
                                 textDecoration: isDone ? 'line-through' : 'none',
@@ -103,7 +103,7 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
                     </Box>
                     <Divider />
                     <Typography
-                        sx={{ my: 1.5, fontSize: '1.2rem' }}
+                        sx={{ my: 1.5, fontSize: '1rem' }}
                         color="text.secondary"
                     >
                         {description}
@@ -115,19 +115,19 @@ export default function ExerciseItem(props: ExerciseDTO & { isManageMode?: boole
                             justifyContent: 'space-between',
                         }}
                     >
-                        <Typography variant="h5" component="p">
-                            Reps: {reps}
+                        <Typography variant="h6" component="p">
+                            R: {reps}
                         </Typography>
-                        <Typography variant="h5" component="p">
-                            Series: {series}
+                        <Typography variant="h6" component="p">
+                            S: {series}
                         </Typography>
                         {isOwnBodyWeight ? (
-                            <Typography variant="h5" component="p">
+                            <Typography variant="h6" component="p">
                                 Body weight
                             </Typography>
                         ) : (
-                            <Typography variant="h5" component="p">
-                                Weigth: {weight} kg
+                            <Typography variant="h6" component="p">
+                                W: {weight} kg
                             </Typography>
                         )}
                     </Box>

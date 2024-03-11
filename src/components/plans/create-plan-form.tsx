@@ -125,7 +125,7 @@ export default function CreatePlanForm() {
                 onClose={() => setSnackbarState(defaultSnackbarState)}
                 message={snackbarState.message}
             />
-            <PageHeader title="Create plan">
+            <PageHeader title="Create new">
                 <Link href="/plans" passHref>
                     <IconButton>
                         <ArrowBack />
@@ -203,9 +203,10 @@ export default function CreatePlanForm() {
                             width: '100%',
                             justifyContent: 'space-between',
                             alignItems: 'center',
+                            py: 2,
                         }}
                     >
-                        <Typography variant="h3" component="h3">
+                        <Typography variant="h4" component="h4">
                             Exercises
                         </Typography>
                         <Button
@@ -216,7 +217,7 @@ export default function CreatePlanForm() {
                             variant="contained"
                             startIcon={<Add />}
                         >
-                            Add Exercise
+                            Add
                         </Button>
                     </Box>
                     <Divider />

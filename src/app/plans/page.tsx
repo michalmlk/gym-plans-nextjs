@@ -7,6 +7,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import PlansGrid from '@/components/plans-grid/plans-grid';
 import { PlanDTO } from '@/app/common/model';
 import { getPlans } from '@/utils/plans';
+import { Add } from '@mui/icons-material';
 
 export default async function PlansPage() {
     const plans: PlanDTO[] = await getPlans();
@@ -15,11 +16,11 @@ export default async function PlansPage() {
             <div className="flex flex-col gap-5">
                 <PageHeader title="Plans">
                     <Link href="/plans/create" passHref>
-                        <Button variant="contained">Crete your own plan</Button>
+                        <Button variant="contained" startIcon={<Add />}>Crete new</Button>
                     </Link>
                 </PageHeader>
                 <Suspense fallback={<LinearProgress />}>
-                    <PlansGrid plans={plans}/>
+                    <PlansGrid plans={plans} />
                 </Suspense>
             </div>
         </Container>

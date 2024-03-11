@@ -10,7 +10,7 @@ export default function ManagePlanPage({ params }: { params: { id: string } }) {
 
     return (
         <Container className="p-24 bg-transparent">
-            <PageHeader title="Manage plan">
+            <PageHeader title="Edit">
                 <ManagePlanButtons id={id} />
             </PageHeader>
             <Suspense fallback={<LinearProgress />}>
