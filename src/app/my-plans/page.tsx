@@ -8,7 +8,7 @@ import { getPlansForLoggedUser } from '@/utils/plans';
 export default async function MyPlansPage() {
     const plans = await getPlansForLoggedUser();
     return (
-        <Container className="p-24">
+        <Container className="p-24 bg-transparent">
             <div className="flex flex-col gap-5">
                 <PageHeader title="My plans" />
                 <Suspense fallback={<LinearProgress />}>

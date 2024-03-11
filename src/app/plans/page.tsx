@@ -11,7 +11,7 @@ import { getPlans } from '@/utils/plans';
 export default async function PlansPage() {
     const plans: PlanDTO[] = await getPlans();
     return (
-        <Container className="p-24">
+        <Container className="p-24 bg-transparent">
             <div className="flex flex-col gap-5">
                 <PageHeader title="Plans">
                     <Link href="/plans/create" passHref>

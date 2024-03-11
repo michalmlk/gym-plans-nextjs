@@ -11,7 +11,7 @@ export default function PlanPage({ params }: any) {
     const { id } = params;
 
     return (
-        <Container className="p-24">
+        <Container className="p-24 bg-transparent">
             <PageHeader title="Details">
                 <Link href="/plans" passHref>
                     <IconButton>

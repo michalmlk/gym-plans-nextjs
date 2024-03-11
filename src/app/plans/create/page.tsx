@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 
 export default function CreatePlan() {
     return (
-        <Container className="p-24">
+        <Container className="p-24 bg-transparent">
             <CreatePlanForm />
         </Container>
     );

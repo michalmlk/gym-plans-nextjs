@@ -1,4 +1,5 @@
 'use client';
+
 import { Outfit } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
 
@@ -11,6 +12,9 @@ const outfit = Outfit({
 const theme = createTheme({
     typography: {
         fontFamily: outfit.style.fontFamily,
+    },
+    palette: {
+        mode: 'dark',
     },
 });
 

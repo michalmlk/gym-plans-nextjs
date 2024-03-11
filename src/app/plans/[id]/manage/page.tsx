@@ -9,7 +9,7 @@ export default function ManagePlanPage({ params }: { params: { id: string } }) {
     const { id } = params;
 
     return (
-        <Container className="p-24">
+        <Container className="p-24 bg-transparent">
             <PageHeader title="Manage plan">
                 <ManagePlanButtons id={id} />
             </PageHeader>

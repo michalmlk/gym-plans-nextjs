@@ -4,22 +4,19 @@
 
 :root {
     --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 255, 255, 255;
-    --background-end-rgb: 215, 215, 215;
+    --background-rgb: 215, 215, 215;
 }
 
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
     :root {
         --foreground-rgb: 255, 255, 255;
-        --background-start-rgb: 0, 0, 0;
-        --background-end-rgb: 0, 0, 0;
+        --background-rgb: 40, 40, 40;
     }
-} */
+}
+
 
 body {
-    color: rgb(var(--foreground-rgb));
-    background: linear-gradient(90deg, rgb(255, 255, 255), rgb(215, 213, 254));
-    font-family: 'Fredoka', sans-serif;
+    background: rgb(var(--background-rgb));
 }
 
 @layer utilities {

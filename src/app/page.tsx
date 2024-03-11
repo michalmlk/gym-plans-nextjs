@@ -14,7 +14,7 @@ import Button from '@mui/material/Button';
 
 export default async function Home() {
     return (
-        <Container maxWidth="lg" className="p-24">
+        <Container maxWidth="lg" className="p-24 bg-transparent">
             <main>
                 <section>
                     <PageHeader title="Start working." classNames="uppercase" />
