@@ -121,7 +121,6 @@ export default async function Home() {
                 <section>
                     <PageHeader
                         title="Let's get started"
-                        classNames="uppercase justify-center"
                     />
                     <Box
                         sx={{
