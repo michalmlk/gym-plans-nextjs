@@ -17,7 +17,7 @@ export default async function Home() {
         <Container maxWidth="lg" className="p-24 bg-transparent">
             <main>
                 <section>
-                    <PageHeader title="Start working." classNames="uppercase" />
+                    <PageHeader title="Start working." />
                     <Box
                         sx={{
                             gap: '6rem',
@@ -86,7 +86,7 @@ export default async function Home() {
                     </Box>
                 </section>
                 <section>
-                    <PageHeader title="Simple steps" classNames="uppercase" />
+                    <PageHeader title="Simple steps" />
                     <Box
                         sx={{
                             display: 'flex',
@@ -133,7 +133,8 @@ export default async function Home() {
                             minHeight: '50vh',
                         }}
                     >
-                        <Typography variant="body1" color="text.secondary" className="max-w-screen-lg text-justify">Lorem ipsum dolor sit amet, consectetur
+                        <Typography variant="body1" color="text.secondary" className="max-w-screen-lg text-justify">Lorem
+                            ipsum dolor sit amet, consectetur
                             adipisicing elit. Accusamus explicabo laudantium repellat vitae voluptas? Aliquid at atque
                             impedit nesciunt numquam saepe voluptates! Accusamus illo, impedit molestiae nobis quibusdam
                             quod saepe!</Typography>
