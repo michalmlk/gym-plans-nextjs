@@ -1,23 +1,20 @@
+import React from 'react';
 import { PropsWithChildren, ReactNode } from 'react';
-import './page-header.css';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 type PageHeaderProps = {
     title: string;
-    classNames?: string;
 };
 const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = ({
-    title,
-    classNames,
-    children,
-}): ReactNode => {
+                                                                      title,
+                                                                      children,
+                                                                  }): ReactNode => {
     return (
-        <header
-            className={`header flex justify-between items-center w-full my-10 ${classNames}`}
-        >
-            <h1 className="font-bold align-center">{title}</h1>
-
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '2.5rem 0' }}>
+            <Typography variant="h2" component="h2">{title}</Typography>
             {children}
-        </header>
+        </Box>
     );
 };
 export default PageHeader;

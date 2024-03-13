@@ -73,7 +73,7 @@ export default function CreatePlanForm() {
         reValidateMode: 'onChange',
         mode: 'onChange',
         defaultValues: {
-            title: 'Examplary plan',
+            title: '',
             description: '',
             tags: [],
             userId: user?.id,
@@ -207,7 +207,7 @@ export default function CreatePlanForm() {
                         }}
                     >
                         <Typography variant="h4" component="h4">
-                            Exercises
+                            Exercises {fields.length ? `(${fields.length})` : ''}
                         </Typography>
                         <Button
                             onClick={() => append(
