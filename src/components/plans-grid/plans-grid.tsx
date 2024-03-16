@@ -3,6 +3,7 @@ import PlanItem from '../plan-item/plan-item';
 import Box from '@mui/material/Box';
 import { PlanDTO } from '@/app/common/model';
 import Typography from '@mui/material/Typography';
+import UserItem from '@/components/plan-item/user-item';
 
 type PlansGridProps = {
     plans: PlanDTO[];
@@ -24,18 +25,15 @@ export default async function PlansGrid({ plans, isManageMode = false }: PlansGr
             }}
         >
             {plans.length ?
-                plans.map(({ title, description, tags, userId, $id }) => (
+                plans.map(({$id, userId }) => (
                     <PlanItem
                         key={$id}
-                        title={title}
-                        description={description || ''}
-                        author={userId}
                         id={$id}
-                        tags={tags}
-                        userId={userId}
                         isManageMode={isManageMode}
-                    />
-                )) : <Typography variant="h4" component="h4">No plans</Typography> }
+                    >
+                        <UserItem userId={userId} />
+                    </PlanItem>
+                )) : <Typography variant="h4" component="h4">No plans</Typography>}
         </Box>
     );
 }

@@ -37,6 +37,15 @@ export const getPlan = async (planId: string): Promise<PlanDTO> => {
     );
 };
 
+export const addPlanToFavorites = async (planId: string, userId: string): Promise<PlanDTO> => {
+    const currentPlan = await getPlan(planId);
+    return await appwriteDatabase.updateDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
+        'plans',
+        planId, {
+            likedBy: currentPlan.likedBy.includes(userId) ? currentPlan.likedBy.filter(id => id !== userId) : [...currentPlan.likedBy, userId],
+        });
+};
+
 export const createPlan = async (
     data: Pick<
         PlanDTO,

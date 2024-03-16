@@ -8,6 +8,7 @@ export type PlanDTO = {
     userId: string;
     exerciseIds: string[];
     exercises: ExerciseDTO[];
+    likedBy: string[];
 } & sdk.Models.Document;
 
 export type ExerciseDTO = {
