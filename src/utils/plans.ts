@@ -37,6 +37,15 @@ export const getPlan = async (planId: string): Promise<PlanDTO> => {
     );
 };
 
+export const addPlanToFavorites = async (planId: string, userId: string): Promise<PlanDTO> => {
+    const currentPlan = await getPlan(planId);
+    return await appwriteDatabase.updateDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
+        'plans',
+        planId, {
+            likedBy: currentPlan.likedBy.includes(userId) ? currentPlan.likedBy.filter(id => id !== userId) : [...currentPlan.likedBy, userId],
+        });
+};
+
 export const createPlan = async (
     data: Pick<
         PlanDTO,
@@ -66,6 +75,20 @@ export const deletePlan = async (planId: string): Promise<void> => {
     try {
         await appwriteDatabase.deleteDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
             'plans', planId);
+    } catch (e: any) {
+        throw new Error(e.message);
+    }
+};
+
+export const updatePlanRate = async (planId: string, userRate: number | null): Promise<void> => {
+    try {
+        const { rate } = await getPlan(planId);
+        const newRate = userRate && rate ? (rate + userRate) / 2 : rate || userRate;
+
+        await appwriteDatabase.updateDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
+            'plans', planId, {
+                rate: newRate,
+            });
     } catch (e: any) {
         throw new Error(e.message);
     }

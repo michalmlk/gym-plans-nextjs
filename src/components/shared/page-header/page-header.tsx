@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { PropsWithChildren, ReactNode } from 'react';
 import Typography from '@mui/material/Typography';
