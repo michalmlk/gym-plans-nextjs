@@ -79,3 +79,17 @@ export const deletePlan = async (planId: string): Promise<void> => {
         throw new Error(e.message);
     }
 };
+
+export const updatePlanRate = async (planId: string, userRate: number | null): Promise<void> => {
+    try {
+        const { rate } = await getPlan(planId);
+        const newRate = userRate && rate ? (rate + userRate) / 2 : rate || userRate;
+
+        await appwriteDatabase.updateDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
+            'plans', planId, {
+                rate: newRate,
+            });
+    } catch (e: any) {
+        throw new Error(e.message);
+    }
+};

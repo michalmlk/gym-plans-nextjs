@@ -17,6 +17,7 @@ import Favorite from '@mui/icons-material/Favorite';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import { useUser } from '@clerk/nextjs';
 import { Tooltip } from '@mui/material';
+import { Star } from '@mui/icons-material';
 
 export type PlanItemProps = {
     id: string;
@@ -51,7 +52,7 @@ export default function PlanItem({
                 <CardHeader title={data?.title} style={{ paddingBottom: 0 }}
                             action={
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <Tooltip title={`${data?.likedBy.length} users love it!.`}>
+                                    <Tooltip title={`${data?.likedBy.length} love it!.`}>
                                         <Typography variant="body1"
                                                     color="textSecondary">{data?.likedBy.length}</Typography>
                                     </Tooltip>
@@ -62,7 +63,10 @@ export default function PlanItem({
                                 </Box>
                             } />
                 <CardContent className="grow">
-                    <Typography variant="body1" component="p">
+                    <Typography variant="body1" component="div">
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            <Star /> {data?.rate}
+                        </Typography>
                         {data?.description}
                     </Typography>
                     <Box
