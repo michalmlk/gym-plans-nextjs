@@ -1,7 +1,7 @@
 import { ID, Query } from 'appwrite';
 import { appwriteDatabase } from './appwrite';
-import { PlanDTO } from '@/app/common/model';
-import { currentUser } from '@clerk/nextjs';
+import { PlanDTO, RateDTO } from '@/app/common/model';
+import { clerkClient, currentUser } from '@clerk/nextjs';
 import { User } from '@clerk/backend';
 
 export const getPlans = async (): Promise<Array<PlanDTO>> => {
@@ -80,14 +80,14 @@ export const deletePlan = async (planId: string): Promise<void> => {
     }
 };
 
-export const updatePlanRate = async (planId: string, userRate: number | null): Promise<void> => {
+export const updatePlanRate = async (planId: string, data: RateDTO): Promise<void> => {
     try {
-        const { rate } = await getPlan(planId);
-        const newRate = userRate && rate ? (rate + userRate) / 2 : rate || userRate;
+        const { plansRating } = await getPlan(planId);
+        const prevCurrentUserRate = plansRating.length ? plansRating.find(rate => rate.userId === data.userId && rate.planId === planId) : null;
 
         await appwriteDatabase.updateDocument(process.env.NEXT_PUBLIC_APPWRITE_DB_ID!,
             'plans', planId, {
-                rate: newRate,
+                plansRating: prevCurrentUserRate ? [...plansRating.filter(rate => rate.userId !== data.userId && rate.planId !== planId), data] : [...plansRating, data],
             });
     } catch (e: any) {
         throw new Error(e.message);
