@@ -1,5 +1,11 @@
 import sdk from 'node-appwrite';
 
+export type RateDTO = {
+    userId: string;
+    planId: string;
+    rate: number;
+};
+
 export type PlanDTO = {
     id: string;
     title: string;
@@ -10,6 +16,7 @@ export type PlanDTO = {
     exercises: ExerciseDTO[];
     likedBy: string[];
     rate: number;
+    plansRating: RateDTO[];
 } & sdk.Models.Document;
 
 export type ExerciseDTO = {

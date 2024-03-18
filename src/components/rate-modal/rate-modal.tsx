@@ -7,6 +7,7 @@ import { useState } from 'react';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import { updatePlanRate } from '@/utils/plans';
+import { useUser } from '@clerk/nextjs';
 
 type RateModalProps = {
     id: string;
@@ -16,8 +17,14 @@ export default function RateModal({ id, isOpen, onClose }: RateModalProps) {
     const [rate, setRate] = useState<number | null>(0);
     const [wasRated, setWasRated] = useState(false);
 
+    const { user } = useUser();
+
     const handleRate = async (): Promise<void> => {
-        await updatePlanRate(id, rate);
+        await updatePlanRate(id, {
+            userId: user?.id!,
+            planId: id,
+            rate: rate || 0,
+        });
         setWasRated(true);
     };
 

@@ -18,6 +18,7 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import { useUser } from '@clerk/nextjs';
 import { Tooltip } from '@mui/material';
 import { Star } from '@mui/icons-material';
+import { RateDTO } from '@/app/common/model';
 
 export type PlanItemProps = {
     id: string;
@@ -40,6 +41,8 @@ export default function PlanItem({
         await addPlanToFavorites(id, user?.id!);
         await queryClient.invalidateQueries({ queryKey: [`plan-${id}`] });
     };
+
+    const averageOfRating = data?.plansRating.reduce((acc: number, current: RateDTO) => (acc + current.rate) / data?.plansRating.length, 0);
 
     return (
         <Box
@@ -65,7 +68,7 @@ export default function PlanItem({
                 <CardContent className="grow">
                     <Typography variant="body1" component="div">
                         <Typography variant="body2" color="textSecondary" component="p">
-                            <Star /> {data?.rate}
+                            <Star /> {averageOfRating}
                         </Typography>
                         {data?.description}
                     </Typography>
